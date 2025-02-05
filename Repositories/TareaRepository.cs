@@ -62,7 +62,6 @@ public class TareaRepository : ITareaRepository
 
         return tarea;
     }
-
     public void modificarTarea(int id, Tarea tarea)
     {
         string queryString = @"UPDATE tarea SET nombre = @nombre, descripcion = @descripcion, color = @color WHERE id = @id";
@@ -84,8 +83,7 @@ public class TareaRepository : ITareaRepository
 
         }
     }
-
-    public List<Tarea> obtenerTareasXUsario(int idUsuario)
+     public List<Tarea> obtenerTareasXUsario(int idUsuario)
     {
         List<Tarea> tareas = new List<Tarea>();
         string queryString = @"SELECT * FROM tarea WHERE id_usuario_asignado = @idUsuario";

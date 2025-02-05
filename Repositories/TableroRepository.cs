@@ -98,7 +98,6 @@ public class TableroRepository : ITableroRepository
 
         return tableros;
     }
-
     public List<Tablero> listarTablerosPorID(int idUsuario)
     {
         List<Tablero> tableros = new List<Tablero>();
@@ -129,7 +128,6 @@ public class TableroRepository : ITableroRepository
 
         return tableros;
     }
-
     public void eliminarTablero(int id)
     {
         string queryString = @"DELETE FROM tablero WHERE id = @id";

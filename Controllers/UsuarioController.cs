@@ -2,7 +2,11 @@ using Microsoft.AspNetCore.Mvc;
 
 public class UsuarioController : Controller
 {
-    UsuarioRepository repoUsuario = new UsuarioRepository();
+    IUsuarioRepository _usuarioRepository = new UsuarioRepository();
+    public UsuarioController(IUsuarioRepository usuarioRepository)
+    {
+        _usuarioRepository = usuarioRepository;
+    }
 
     [HttpGet]
     public IActionResult IrACrearUsuario()
@@ -13,7 +17,7 @@ public class UsuarioController : Controller
     [HttpPost]
     public IActionResult crearUsuario(Usuario usuario)
     {
-        repoUsuario.crearUsuario(usuario);
+        _usuarioRepository.crearUsuario(usuario);
 
         return RedirectToAction("Index", "Login");
     }
@@ -23,7 +27,7 @@ public class UsuarioController : Controller
     public IActionResult IrAModificarUsuario(int id)
     {
         Usuario usuario = new Usuario();
-        usuario = repoUsuario.obtenerUsuario(id);
+        usuario = _usuarioRepository.obtenerUsuario(id);
 
         return View(usuario);
     }
@@ -32,7 +36,7 @@ public class UsuarioController : Controller
 
     public IActionResult modificarUsuario(int id, Usuario usuario)
     {
-        repoUsuario.modificarUsuario(id, usuario);
+        _usuarioRepository.modificarUsuario(id, usuario);
 
         return RedirectToAction("Index", "Login");
     }
@@ -40,9 +44,17 @@ public class UsuarioController : Controller
     [HttpGet]
     public IActionResult listarUsuarios()
     {
-        List<Usuario> usuarios = repoUsuario.listarUsuarios();
+        List<Usuario> usuarios = _usuarioRepository.listarUsuarios();
 
         return View(usuarios);
+    }
+
+    [HttpPost]
+    public IActionResult eliminarUsuario(int id)
+    {
+        _usuarioRepository.eliminarUsuario(id);
+
+        return RedirectToAction("Index", "Login");
     }
 
 }

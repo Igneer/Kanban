@@ -1,7 +1,15 @@
+//Este es el contenedor de dependencias
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+//Registro de las dependencias
+builder.Services.AddScoped<ITableroRepository, TableroRepository>();
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+builder.Services.AddScoped<ITareaRepository, TareaRepository>();
+
 
 var app = builder.Build();
 

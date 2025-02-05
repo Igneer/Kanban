@@ -4,7 +4,11 @@ using Kanban.Models;
 
 public class TableroController : Controller
 {
-    TableroRepository repoTablero = new TableroRepository();
+    private readonly ITableroRepository _tableroRepository;
+    public TableroController(ITableroRepository tableroRepository)
+    {
+        _tableroRepository = tableroRepository;
+    }
 
     [HttpGet]
     public IActionResult IrACrearTablero()
@@ -15,7 +19,7 @@ public class TableroController : Controller
     [HttpPost]
     public IActionResult crearTablero(Tablero tablero, int IdUsuarioPropietario)
     {
-        repoTablero.crearTablero(tablero, IdUsuarioPropietario);
+        _tableroRepository.crearTablero(tablero, IdUsuarioPropietario);
 
         return RedirectToAction("Index", "Login");
     }
@@ -24,7 +28,7 @@ public class TableroController : Controller
     public IActionResult IrAModificarTablero(int id)
     {
         Tablero tablero = new Tablero(); 
-        tablero = repoTablero.obtenerTablero(id);
+        tablero = _tableroRepository.obtenerTablero(id);
 
         return View(tablero);
     }
@@ -32,7 +36,7 @@ public class TableroController : Controller
     [HttpPost]
     public IActionResult modificarTablero(int id, Tablero tablero)
     {
-        repoTablero.modificarTablero(id, tablero);
+        _tableroRepository.modificarTablero(id, tablero);
 
         return RedirectToAction("Index", "Login");
     }
@@ -40,7 +44,7 @@ public class TableroController : Controller
     [HttpGet]
     public IActionResult listarTableros()
     {
-        List<Tablero> tableros = repoTablero.listarTableros();
+        List<Tablero> tableros = _tableroRepository.listarTableros();
     
         return View(tableros);
     }
@@ -48,8 +52,16 @@ public class TableroController : Controller
     [HttpGet]
     public IActionResult listarTablerosPorID(int idUsuario)
     {
-        List<Tablero> tableros = repoTablero.listarTablerosPorID(idUsuario);
+        List<Tablero> tableros = _tableroRepository.listarTablerosPorID(idUsuario);
 
         return View(tableros);
     }   
+
+    [HttpPost]
+    public IActionResult eliminarTablero(int id)
+    {
+        _tableroRepository.eliminarTablero(id);
+
+        return RedirectToAction("Index", "Login");
+    }
 }

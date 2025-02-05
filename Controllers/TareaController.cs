@@ -1,7 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 public class TareaController : Controller
 {
-    TareaRepository repoTarea = new TareaRepository();
+    private readonly ITareaRepository _tareaRepository;
+    public TareaController(ITareaRepository tareaRepository)
+    {
+        _tareaRepository = tareaRepository;
+    }
 
     [HttpGet]
     public IActionResult IrACrearTarea()
@@ -12,7 +16,7 @@ public class TareaController : Controller
     [HttpPost]
     public IActionResult crearTarea(Tarea tarea, int idTablero)
     {
-        repoTarea.crearTarea(tarea, idTablero);
+        _tareaRepository.crearTarea(tarea, idTablero);
 
         return RedirectToAction("Index", "Login");
     }
@@ -22,7 +26,7 @@ public class TareaController : Controller
     {
         Tarea tarea = new Tarea();
 
-        tarea = repoTarea.obtenerTarea(id);
+        tarea = _tareaRepository.obtenerTarea(id);
 
         return View(tarea);
     }
@@ -30,7 +34,15 @@ public class TareaController : Controller
     [HttpPost]
     public IActionResult modificarTarea(int id, Tarea tarea)
     {
-        repoTarea.modificarTarea(id, tarea);
+        _tareaRepository.modificarTarea(id, tarea);
+
+        return RedirectToAction("Index", "Login");
+    }
+
+    [HttpPost]
+    public IActionResult eliminarTarea(int id)
+    {
+        _tareaRepository.eliminarTarea(id);
 
         return RedirectToAction("Index", "Login");
     }

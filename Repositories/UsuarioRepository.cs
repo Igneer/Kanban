@@ -23,7 +23,6 @@ public class UsuarioRepository  : IUsuarioRepository
 
         return usuario;
     }
-
     public Usuario obtenerUsuario(int id)
     {
         Usuario usuario = new Usuario();
@@ -49,7 +48,6 @@ public class UsuarioRepository  : IUsuarioRepository
 
         return usuario;
     }
-
     public void modificarUsuario(int id, Usuario usuario)
     {
         string queryString = @"UPDATE usuario SET nombre_usuario = @nombre, password = @password, rolusuario = @rolusuario WHERE id = @id";
@@ -72,7 +70,6 @@ public class UsuarioRepository  : IUsuarioRepository
         }
 
     } 
-    
     public List<Usuario> listarUsuarios()
     {
         List<Usuario> usuarios = new List<Usuario>();
@@ -101,7 +98,6 @@ public class UsuarioRepository  : IUsuarioRepository
 
         return usuarios;
     }
-
     public void cambiarContraseña(int id, string password)
     {
         string queryString = @"UPDATE usuario SET password = @password WHERE id = @id";
@@ -121,7 +117,6 @@ public class UsuarioRepository  : IUsuarioRepository
 
         }
     }
-
     public void eliminarUsuario(int id)
     {
         string queryString = @"DELETE FROM usuario WHERE id = @id";
