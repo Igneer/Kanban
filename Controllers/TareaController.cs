@@ -1,4 +1,7 @@
+using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Kanban.Models;
+
 public class TareaController : Controller
 {
     private readonly ITareaRepository _tareaRepository;

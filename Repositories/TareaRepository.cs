@@ -1,5 +1,6 @@
 using System.Data.Common;
 using Microsoft.Data.Sqlite;
+using Kanban.Models;
 public class TareaRepository : ITareaRepository
 {
     string connectionString = "Data Source=DB/Kanban.db;Cache=Shared";

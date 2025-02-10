@@ -1,4 +1,6 @@
 using Microsoft.Data.Sqlite;
+using Kanban.Models;
+
 public class TableroRepository : ITableroRepository
 {
     string connectionString = "Data Source=DB/Kanban.db;Cache=Shared";

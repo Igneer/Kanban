@@ -1,4 +1,6 @@
 using Microsoft.Data.Sqlite;
+using Kanban.Models;
+
 public class UsuarioRepository  : IUsuarioRepository
 {
     string connectionString = "Data Source=DB/Kanban.db;Cache=Shared";
@@ -41,7 +43,7 @@ public class UsuarioRepository  : IUsuarioRepository
                 usuario.Id = Convert.ToInt32(reader["id"]);
                 usuario.NombreUsuario = reader["nombre_usuario"].ToString();
                 usuario.Password = reader["password"].ToString();
-                usuario.Rol = (RolUsario)Convert.ToInt32(reader["rolusuario"]);
+                usuario.Rol = (RolUsuario)Convert.ToInt32(reader["rolusuario"]);
             }
             connection.Close();
         }
@@ -88,7 +90,7 @@ public class UsuarioRepository  : IUsuarioRepository
                     usuario.Id = Convert.ToInt32(reader["id"]);
                     usuario.NombreUsuario = reader["nombre_usuario"].ToString();
                     usuario.Password = reader["password"].ToString();
-                    usuario.Rol = (RolUsario)Convert.ToInt32(reader["rolusuario"]);
+                    usuario.Rol = (RolUsuario)Convert.ToInt32(reader["rolusuario"]);
                     
                     usuarios.Add(usuario);
                 }

@@ -1,3 +1,4 @@
+using Kanban.Models;
 public interface ITareaRepository
 {
     Tarea crearTarea(Tarea tarea, int idTablero);

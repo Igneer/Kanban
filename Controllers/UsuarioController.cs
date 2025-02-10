@@ -1,4 +1,7 @@
+using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Kanban.Models;
+using Kanban.ViewModels;
 
 public class UsuarioController : Controller
 {
@@ -15,28 +18,49 @@ public class UsuarioController : Controller
     }
 
     [HttpPost]
-    public IActionResult crearUsuario(Usuario usuario)
+    public IActionResult crearUsuario(CrearUsuarioViewModel model)
     {
+        Usuario usuario = new Usuario(){
+            NombreUsuario = model.Nombre,
+            Password = model.Password,
+            Rol = model.Rol
+        };
+
         _usuarioRepository.crearUsuario(usuario);
 
         return RedirectToAction("Index", "Login");
     }
 
     [HttpGet]
-
     public IActionResult IrAModificarUsuario(int id)
     {
         Usuario usuario = new Usuario();
         usuario = _usuarioRepository.obtenerUsuario(id);
 
-        return View(usuario);
+        var model = new ModificarUsuarioViewModel()
+        {
+            Id = usuario.Id,
+            NombreUsuario = usuario.NombreUsuario,
+            Password = usuario.Password,
+            Rol = usuario.Rol
+        };
+
+        return View(model);
     }
 
     [HttpPost]
 
-    public IActionResult modificarUsuario(int id, Usuario usuario)
+    public IActionResult modificarUsuario(ModificarUsuarioViewModel model)
     {
-        _usuarioRepository.modificarUsuario(id, usuario);
+        Usuario usuario = new Usuario()
+        {
+            Id = model.Id,
+            NombreUsuario = model.NombreUsuario,
+            Password = model.Password,
+            Rol = model.Rol
+        };
+
+        _usuarioRepository.modificarUsuario(model.Id, usuario);
 
         return RedirectToAction("Index", "Login");
     }
@@ -44,9 +68,12 @@ public class UsuarioController : Controller
     [HttpGet]
     public IActionResult listarUsuarios()
     {
-        List<Usuario> usuarios = _usuarioRepository.listarUsuarios();
+        ListarUsuariosViewModel listadoUsuarios  = new ListarUsuariosViewModel()
+        {
+            Usuarios = _usuarioRepository.listarUsuarios()
+        };
 
-        return View(usuarios);
+        return View(listadoUsuarios);
     }
 
     [HttpPost]

@@ -1,4 +1,6 @@
-@model Usuario
+@using Kanban.ViewModels
+
+@model CrearUsuarioViewModel
 
 @{
     ViewData["Title"] = "Crear Usuario";
@@ -14,9 +16,9 @@
                 <div class="card-body">
                     <form asp-controller="Usuario" asp-action="crearUsuario" method="post">
                         <div class="form-group">
-                            <label asp-for="NombreUsuario" class="form-label">Nombre</label>
-                            <input asp-for="NombreUsuario" class="form-control" />
-                            <span asp-validation-for="NombreUsuario" class="text-danger"></span>
+                            <label asp-for="Nombre" class="form-label">Nombre</label>
+                            <input asp-for="Nombre" class="form-control" />
+                            <span asp-validation-for="Nombre" class="text-danger"></span>
                         </div>
                         <div class="form-group">
                             <label asp-for="Password" class="form-label">Contraseña</label>

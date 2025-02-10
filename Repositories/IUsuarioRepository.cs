@@ -1,3 +1,5 @@
+using Kanban.Models;
+
 public interface IUsuarioRepository
 {
     Usuario crearUsuario(Usuario usuario);

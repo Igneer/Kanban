@@ -1,3 +1,4 @@
+using Kanban.Models;
 public interface ITableroRepository
 {
     Tablero crearTablero(Tablero tablero, int idUsarioPropietario);
