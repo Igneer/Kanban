@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Kanban.Models;
+using Kanban.ViewModels;
 
 public class TareaController : Controller
 {
@@ -17,9 +18,19 @@ public class TareaController : Controller
     }
 
     [HttpPost]
-    public IActionResult crearTarea(Tarea tarea, int idTablero)
+    public IActionResult crearTarea(CrearTareaViewModel model)
     {
-        _tareaRepository.crearTarea(tarea, idTablero);
+        Tarea tarea = new Tarea
+        {
+            Nombre = model.Nombre,
+            Descripcion = model.Descripcion,
+            Estado = (EstadoTarea)model.Estado,
+            IdTablero = model.IdTablero,
+            Color = "rojo",
+            IdUsuarioAsignado = null,
+        };
+
+        _tareaRepository.crearTarea(tarea, model.IdTablero);
 
         return RedirectToAction("Index", "Login");
     }
@@ -27,17 +38,29 @@ public class TareaController : Controller
     [HttpGet]
     public IActionResult IrAModificarTarea(int id)
     {
-        Tarea tarea = new Tarea();
+        Tarea tarea = _tareaRepository.obtenerTarea(id);
 
-        tarea = _tareaRepository.obtenerTarea(id);
+        ModificarTareaViewModel model = new ModificarTareaViewModel()
+        {
+            Id = tarea.Id,
+            Nombre = tarea.Nombre,
+            Descripcion = tarea.Descripcion
+        };
 
-        return View(tarea);
+        return View(model);
     }
 
     [HttpPost]
-    public IActionResult modificarTarea(int id, Tarea tarea)
+    public IActionResult modificarTarea(ModificarTareaViewModel model)
     {
-        _tareaRepository.modificarTarea(id, tarea);
+        Tarea tarea = new Tarea()
+        {
+            Id = model.Id,
+            Nombre = model.Nombre,
+            Descripcion = model.Descripcion
+        };
+
+        _tareaRepository.modificarTarea(model.Id, tarea);
 
         return RedirectToAction("Index", "Login");
     }

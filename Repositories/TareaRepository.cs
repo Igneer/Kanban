@@ -65,7 +65,7 @@ public class TareaRepository : ITareaRepository
     }
     public void modificarTarea(int id, Tarea tarea)
     {
-        string queryString = @"UPDATE tarea SET nombre = @nombre, descripcion = @descripcion, color = @color WHERE id = @id";
+        string queryString = @"UPDATE tarea SET nombre = @nombre, descripcion = @descripcion WHERE id = @id";
             
         using(SqliteConnection connection = new SqliteConnection(connectionString))
         {
@@ -76,7 +76,6 @@ public class TareaRepository : ITareaRepository
             command.Parameters.AddWithValue("@id", id);
             command.Parameters.AddWithValue("@nombre", tarea.Nombre);
             command.Parameters.AddWithValue("@descripcion", tarea.Descripcion);
-            command.Parameters.AddWithValue("@color", tarea.Color);
 
             command.ExecuteNonQuery();
 
