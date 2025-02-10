@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Kanban.Models;
+using Kanban.ViewModels;
 
 public class TableroController : Controller
 {
@@ -17,9 +18,16 @@ public class TableroController : Controller
     }
 
     [HttpPost]
-    public IActionResult crearTablero(Tablero tablero, int IdUsuarioPropietario)
+    public IActionResult crearTablero(CrearTableroViewModel crearTableroViewModel)
     {
-        _tableroRepository.crearTablero(tablero, IdUsuarioPropietario);
+        Tablero tablero = new Tablero()
+        {
+            IdUsuarioPropietario = crearTableroViewModel.IdUsuarioPropietario,
+            Nombre = crearTableroViewModel.Nombre,
+            Descripcion = crearTableroViewModel.Descripcion
+        };
+
+        _tableroRepository.crearTablero(tablero, crearTableroViewModel.IdUsuarioPropietario);
 
         return RedirectToAction("Index", "Login");
     }
@@ -30,13 +38,27 @@ public class TableroController : Controller
         Tablero tablero = new Tablero(); 
         tablero = _tableroRepository.obtenerTablero(id);
 
-        return View(tablero);
+        ModificarTableroViewModel modificarTableroViewModel = new ModificarTableroViewModel()
+        {
+            Id = tablero.Id,
+            Nombre = tablero.Nombre,
+            Descripcion = tablero.Descripcion
+        };
+
+        return View(modificarTableroViewModel);
     }
 
     [HttpPost]
-    public IActionResult modificarTablero(int id, Tablero tablero)
+    public IActionResult modificarTablero(ModificarTableroViewModel modificarTableroViewModel)
     {
-        _tableroRepository.modificarTablero(id, tablero);
+        Tablero tablero = new Tablero()
+        {
+            Id = modificarTableroViewModel.Id,
+            Nombre = modificarTableroViewModel.Nombre,
+            Descripcion = modificarTableroViewModel.Descripcion
+        };
+
+        _tableroRepository.modificarTablero(modificarTableroViewModel.Id, tablero);
 
         return RedirectToAction("Index", "Login");
     }
@@ -44,17 +66,23 @@ public class TableroController : Controller
     [HttpGet]
     public IActionResult listarTableros()
     {
-        List<Tablero> tableros = _tableroRepository.listarTableros();
+        ListarTablerosViewModel listarTablerosViewModel = new ListarTablerosViewModel()
+        {
+            Tableros = _tableroRepository.listarTableros()
+        };
     
-        return View(tableros);
+        return View(listarTablerosViewModel);
     }
 
     [HttpGet]
     public IActionResult listarTablerosPorID(int idUsuario)
     {
-        List<Tablero> tableros = _tableroRepository.listarTablerosPorID(idUsuario);
+        ListarTablerosViewModel listarTablerosViewModel = new ListarTablerosViewModel()
+        {
+            Tableros = _tableroRepository.listarTablerosPorID(idUsuario)
+        };
 
-        return View(tableros);
+        return View(listarTablerosViewModel);
     }   
 
     [HttpPost]
