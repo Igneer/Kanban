@@ -10,6 +10,14 @@ builder.Services.AddScoped<ITableroRepository, TableroRepository>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<ITareaRepository, TareaRepository>();
 
+//Agregar servicios de sesion
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(10);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 var app = builder.Build();
 
@@ -26,10 +34,13 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+//Usar el middleware de sesion
+app.UseSession();
+
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Usuario}/{action=IrACrearUsuario}/{id?}");
+    pattern: "{controller=Login}/{action=IrAIniciarSesion}/{id?}");
 
 app.Run();

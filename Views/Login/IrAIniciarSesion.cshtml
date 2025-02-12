@@ -1,0 +1,35 @@
+@using Kanban.ViewModels;
+@model LoginViewModel;
+
+@{
+    ViewData["Title"] = "Logueo";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white">
+                    <h2 class="mb-0">Iniciar Sesión</h2>
+                </div>
+                <div class="card-body">
+                    <form asp-controller="Login" asp-action="IniciarSesion" method="post">
+                        <div class="form-group">
+                            <label asp-for="Nombre" class="form-label"></label>
+                            <input asp-for="Nombre" class="form-control" />
+                            <span asp-validation-for="Nombre" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Password" class="form-label"></label>
+                            <input asp-for="Password" class="form-control" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <div class="d-grid mt-3">
+                            <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -5,7 +5,7 @@ using Kanban.ViewModels;
 
 public class UsuarioController : Controller
 {
-    IUsuarioRepository _usuarioRepository = new UsuarioRepository();
+    private readonly IUsuarioRepository _usuarioRepository;
     public UsuarioController(IUsuarioRepository usuarioRepository)
     {
         _usuarioRepository = usuarioRepository;
