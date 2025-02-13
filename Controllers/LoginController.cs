@@ -25,7 +25,11 @@ public class LoginController : Controller
     {
         var usuarios = _usuarioRepository.listarUsuarios();
         var usuario = usuarios.FirstOrDefault(u => u.NombreUsuario == model.Nombre && u.Password == model.Password);
-        if (usuario == null) return View();
+        if (usuario == null)
+        {
+            ModelState.AddModelError(string.Empty, "Nombre de usuario o contraseña incorrectos.");
+            return View("IrAIniciarSesion");  
+        } 
 
         HttpContext.Session.SetString("Rol", usuario.Rol.ToString());
         return RedirectToAction("Index", "Login");
