@@ -3,7 +3,10 @@
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(options =>
+{
+    options.Filters.Add<AuthorizeUserFilter>();
+});
 
 //Registro de las dependencias
 builder.Services.AddScoped<ITableroRepository, TableroRepository>();

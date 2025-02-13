@@ -9,6 +9,7 @@ namespace Kanban.Controllers;
 public class LoginController : Controller
 {
     private readonly IUsuarioRepository _usuarioRepository;
+    
     public LoginController(IUsuarioRepository usuarioRepository)
     {
         _usuarioRepository = usuarioRepository;
@@ -25,13 +26,17 @@ public class LoginController : Controller
     {
         var usuarios = _usuarioRepository.listarUsuarios();
         var usuario = usuarios.FirstOrDefault(u => u.NombreUsuario == model.Nombre && u.Password == model.Password);
+        
         if (usuario == null)
         {
             ModelState.AddModelError(string.Empty, "Nombre de usuario o contraseña incorrectos.");
             return View("IrAIniciarSesion");  
         } 
 
+        HttpContext.Session.SetInt32("Id", usuario.Id);
+        HttpContext.Session.SetString("Nombre", usuario.NombreUsuario);
         HttpContext.Session.SetString("Rol", usuario.Rol.ToString());
+
         return RedirectToAction("Index", "Login");
     }
 
@@ -44,6 +49,9 @@ public class LoginController : Controller
     }
     public IActionResult Index()
     {
+        var usuario = HttpContext.Session.GetString("Nombre");
+        if(usuario == null) return RedirectToAction("IrAIniciarSesion");
+
         return View();
     }
 
