@@ -15,7 +15,14 @@ public class TableroController : Controller
     [ServiceFilter(typeof(AuthorizeUserFilter))]
     public IActionResult IrACrearTablero()
     {
-        return View();
+        int IdUsuarioPropietario = HttpContext.Session.GetInt32("Id").Value;
+
+        var model = new CrearTableroViewModel()
+        {
+            IdUsuarioPropietario = IdUsuarioPropietario
+        };
+
+        return View(model);
     }
 
     [HttpPost]
@@ -64,7 +71,7 @@ public class TableroController : Controller
         {
             return View("IrAModificarTablero");
         }
-        
+
         Tablero tablero = new Tablero()
         {
             Id = modificarTableroViewModel.Id,

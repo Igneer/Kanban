@@ -7,7 +7,7 @@ namespace Kanban.ViewModels
         public int IdUsuarioPropietario {get; set;}
         
         [Required]
-        [StringLength(10, ErrorMessage = "El nombre no puede tener más de 10 caracteres")]
+        [StringLength(15, ErrorMessage = "El nombre no puede tener más de 10 caracteres")]
         public string Nombre {get; set;}
 
         [Required]        

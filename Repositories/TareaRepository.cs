@@ -83,7 +83,7 @@ public class TareaRepository : ITareaRepository
 
         }
     }
-     public List<Tarea> obtenerTareasXUsario(int idUsuario)
+    public List<Tarea> obtenerTareasXUsuario(int idUsuario)
     {
         List<Tarea> tareas = new List<Tarea>();
         string queryString = @"SELECT * FROM tarea WHERE id_usuario_asignado = @idUsuario";
@@ -108,6 +108,44 @@ public class TareaRepository : ITareaRepository
                     tarea.Color = reader["color"].ToString();
                     tarea.IdUsuarioAsignado = Convert.ToInt32(reader["id_usuario_asignado"]);
                     
+                    tareas.Add(tarea);
+                }
+            }
+            connection.Close();
+        }
+
+        return tareas;
+    }
+    public List<Tarea> obtenerTareasXTablero(int idTablero)
+    {
+        List<Tarea> tareas = new List<Tarea>();
+        string queryString = @"SELECT * FROM tarea WHERE id_tablero = @idTablero";
+        
+        using(SqliteConnection connection = new SqliteConnection(connectionString))
+        {
+            connection.Open();
+            SqliteCommand command = new SqliteCommand(queryString, connection);
+
+            command.Parameters.AddWithValue("@idTablero", idTablero);
+            
+            using(SqliteDataReader reader = command.ExecuteReader())
+            {
+                while(reader.Read())
+                {
+                    Tarea tarea = new Tarea();
+                    tarea.Id = Convert.ToInt32(reader["id"]);
+                    tarea.IdTablero = Convert.ToInt32(reader["id_tablero"]);
+                    tarea.Nombre = reader["nombre"].ToString();
+                    tarea.Estado = (EstadoTarea)Convert.ToInt32(reader["estado"]);
+                    tarea.Descripcion = reader["descripcion"].ToString();
+                    tarea.Color = reader["color"].ToString();
+                    if(reader["id_usuario_asignado"] == DBNull.Value)
+                    {
+                        tarea.IdUsuarioAsignado = null;
+                    }else
+                    {
+                        tarea.IdUsuarioAsignado = Convert.ToInt32(reader["id_usuario_asignado"]);
+                    }
                     tareas.Add(tarea);
                 }
             }
