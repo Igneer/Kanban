@@ -3,10 +3,7 @@
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews(options =>
-{
-    options.Filters.Add<AuthorizeUserFilter>();
-});
+builder.Services.AddControllersWithViews();
 
 //Registro de las dependencias
 builder.Services.AddScoped<ITableroRepository, TableroRepository>();
@@ -21,6 +18,11 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
 });
+
+//Registrar filtro de autorizacion
+builder.Services.AddScoped<AuthorizeUserFilter>();
+builder.Services.AddScoped<AdministradorAuthorizeUserFilter>();
+
 
 var app = builder.Build();
 

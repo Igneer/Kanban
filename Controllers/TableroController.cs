@@ -12,12 +12,14 @@ public class TableroController : Controller
     }
 
     [HttpGet]
+    [ServiceFilter(typeof(AuthorizeUserFilter))]
     public IActionResult IrACrearTablero()
     {
         return View();
     }
 
     [HttpPost]
+    [ServiceFilter(typeof(AuthorizeUserFilter))]
     public IActionResult crearTablero(CrearTableroViewModel crearTableroViewModel)
     {
         Tablero tablero = new Tablero()
@@ -33,6 +35,7 @@ public class TableroController : Controller
     }
 
     [HttpGet]
+    [ServiceFilter(typeof(AuthorizeUserFilter))]
     public IActionResult IrAModificarTablero(int id)
     {
         Tablero tablero = new Tablero(); 
@@ -49,6 +52,7 @@ public class TableroController : Controller
     }
 
     [HttpPost]
+    [ServiceFilter(typeof(AuthorizeUserFilter))]
     public IActionResult modificarTablero(ModificarTableroViewModel modificarTableroViewModel)
     {
         Tablero tablero = new Tablero()
@@ -64,6 +68,7 @@ public class TableroController : Controller
     }
 
     [HttpGet]
+    [ServiceFilter(typeof(AuthorizeUserFilter))]
     public IActionResult listarTableros()
     {
         ListarTablerosViewModel listarTablerosViewModel = new ListarTablerosViewModel()
@@ -75,6 +80,7 @@ public class TableroController : Controller
     }
 
     [HttpGet]
+    [ServiceFilter(typeof(AuthorizeUserFilter))]
     public IActionResult listarTablerosPorID(int idUsuario)
     {
         ListarTablerosViewModel listarTablerosViewModel = new ListarTablerosViewModel()
@@ -86,6 +92,7 @@ public class TableroController : Controller
     }   
 
     [HttpPost]
+    [ServiceFilter(typeof(AuthorizeUserFilter))]
     public IActionResult eliminarTablero(int id)
     {
         _tableroRepository.eliminarTablero(id);

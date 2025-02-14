@@ -47,14 +47,17 @@ public class LoginController : Controller
         HttpContext.Session.Clear();
         return RedirectToAction("Login");
     }
+
+    [HttpGet]
+    [ServiceFilter(typeof(AuthorizeUserFilter))]
     public IActionResult Index()
     {
-        var usuario = HttpContext.Session.GetString("Nombre");
-        if(usuario == null) return RedirectToAction("IrAIniciarSesion");
 
         return View();
     }
 
+    [HttpGet]
+    [ServiceFilter(typeof(AuthorizeUserFilter))]
     public IActionResult Privacy()
     {
         return View();

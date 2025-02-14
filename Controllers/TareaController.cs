@@ -12,12 +12,14 @@ public class TareaController : Controller
     }
 
     [HttpGet]
+    [ServiceFilter(typeof(AuthorizeUserFilter))]
     public IActionResult IrACrearTarea()
     {
         return View();
     }
 
     [HttpPost]
+    [ServiceFilter(typeof(AuthorizeUserFilter))]
     public IActionResult crearTarea(CrearTareaViewModel model)
     {
         Tarea tarea = new Tarea
@@ -36,6 +38,7 @@ public class TareaController : Controller
     }
 
     [HttpGet]
+    [ServiceFilter(typeof(AuthorizeUserFilter))]
     public IActionResult IrAModificarTarea(int id)
     {
         Tarea tarea = _tareaRepository.obtenerTarea(id);
@@ -51,6 +54,7 @@ public class TareaController : Controller
     }
 
     [HttpPost]
+    [ServiceFilter(typeof(AuthorizeUserFilter))]
     public IActionResult modificarTarea(ModificarTareaViewModel model)
     {
         Tarea tarea = new Tarea()
@@ -66,6 +70,7 @@ public class TareaController : Controller
     }
 
     [HttpPost]
+    [ServiceFilter(typeof(AuthorizeUserFilter))]
     public IActionResult eliminarTarea(int id)
     {
         _tareaRepository.eliminarTarea(id);

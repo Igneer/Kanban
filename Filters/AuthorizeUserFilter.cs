@@ -4,17 +4,23 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 public class AuthorizeUserFilter : IActionFilter
 {
-    public void OnActionExecuted(ActionExecutedContext context)
+    private readonly ILogger<AuthorizeUserFilter> _logger;
+    public AuthorizeUserFilter(ILogger<AuthorizeUserFilter> logger)
     {
-        throw new NotImplementedException();
+        _logger = logger;
     }
-
     public void OnActionExecuting(ActionExecutingContext context)
     {
         var usuario = context.HttpContext.Session.GetString("Nombre");
         if (usuario == null)
         {
+            _logger.LogInformation("Usuario no autenticado");
             context.Result = new RedirectToActionResult("IrAIniciarSesion", "Login", null);
         }
     }
+    public void OnActionExecuted(ActionExecutedContext context)
+    {
+        _logger.LogInformation("Accion ejecutada");
+    }
+
 }

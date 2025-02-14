@@ -12,12 +12,16 @@ public class UsuarioController : Controller
     }
 
     [HttpGet]
+    [ServiceFilter(typeof(AuthorizeUserFilter))]
+    [ServiceFilter(typeof(AdministradorAuthorizeUserFilter))]
     public IActionResult IrACrearUsuario()
     {
         return View();
     }
 
     [HttpPost]
+    [ServiceFilter(typeof(AuthorizeUserFilter))]
+    [ServiceFilter(typeof(AdministradorAuthorizeUserFilter))]
     public IActionResult crearUsuario(CrearUsuarioViewModel model)
     {
         Usuario usuario = new Usuario(){
@@ -32,6 +36,9 @@ public class UsuarioController : Controller
     }
 
     [HttpGet]
+    
+    [ServiceFilter(typeof(AuthorizeUserFilter))]
+    [ServiceFilter(typeof(AdministradorAuthorizeUserFilter))]
     public IActionResult IrAModificarUsuario(int id)
     {
         Usuario usuario = new Usuario();
@@ -49,7 +56,8 @@ public class UsuarioController : Controller
     }
 
     [HttpPost]
-
+    [ServiceFilter(typeof(AuthorizeUserFilter))]
+    [ServiceFilter(typeof(AdministradorAuthorizeUserFilter))]
     public IActionResult modificarUsuario(ModificarUsuarioViewModel model)
     {
         Usuario usuario = new Usuario()
@@ -66,6 +74,7 @@ public class UsuarioController : Controller
     }
 
     [HttpGet]
+    [ServiceFilter(typeof(AuthorizeUserFilter))]
     public IActionResult listarUsuarios()
     {
         ListarUsuariosViewModel listadoUsuarios  = new ListarUsuariosViewModel()
@@ -77,6 +86,8 @@ public class UsuarioController : Controller
     }
 
     [HttpPost]
+    [ServiceFilter(typeof(AdministradorAuthorizeUserFilter))]
+    [ServiceFilter(typeof(AuthorizeUserFilter))]
     public IActionResult eliminarUsuario(int id)
     {
         _usuarioRepository.eliminarUsuario(id);
