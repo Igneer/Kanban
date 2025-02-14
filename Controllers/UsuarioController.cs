@@ -24,6 +24,11 @@ public class UsuarioController : Controller
     [ServiceFilter(typeof(AdministradorAuthorizeUserFilter))]
     public IActionResult crearUsuario(CrearUsuarioViewModel model)
     {
+        if(!ModelState.IsValid)
+        {
+            return View("IrACrearUsuario");
+        }
+
         Usuario usuario = new Usuario(){
             NombreUsuario = model.Nombre,
             Password = model.Password,
@@ -60,6 +65,11 @@ public class UsuarioController : Controller
     [ServiceFilter(typeof(AdministradorAuthorizeUserFilter))]
     public IActionResult modificarUsuario(ModificarUsuarioViewModel model)
     {
+        if(!ModelState.IsValid)
+        {
+            return View("IrAModificarUsuario");
+        }
+
         Usuario usuario = new Usuario()
         {
             Id = model.Id,

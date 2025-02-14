@@ -22,6 +22,11 @@ public class TableroController : Controller
     [ServiceFilter(typeof(AuthorizeUserFilter))]
     public IActionResult crearTablero(CrearTableroViewModel crearTableroViewModel)
     {
+        if(!ModelState.IsValid) 
+        {
+            return View("IrACrearTablero");
+        }
+
         Tablero tablero = new Tablero()
         {
             IdUsuarioPropietario = crearTableroViewModel.IdUsuarioPropietario,
@@ -55,6 +60,11 @@ public class TableroController : Controller
     [ServiceFilter(typeof(AuthorizeUserFilter))]
     public IActionResult modificarTablero(ModificarTableroViewModel modificarTableroViewModel)
     {
+        if(!ModelState.IsValid) 
+        {
+            return View("IrAModificarTablero");
+        }
+        
         Tablero tablero = new Tablero()
         {
             Id = modificarTableroViewModel.Id,

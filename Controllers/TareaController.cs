@@ -22,6 +22,11 @@ public class TareaController : Controller
     [ServiceFilter(typeof(AuthorizeUserFilter))]
     public IActionResult crearTarea(CrearTareaViewModel model)
     {
+        if(!ModelState.IsValid)
+        {
+            return View("IrACrearTarea");
+        }
+
         Tarea tarea = new Tarea
         {
             Nombre = model.Nombre,
@@ -57,6 +62,11 @@ public class TareaController : Controller
     [ServiceFilter(typeof(AuthorizeUserFilter))]
     public IActionResult modificarTarea(ModificarTareaViewModel model)
     {
+        if(!ModelState.IsValid)
+        {
+            return View("IrAModificarTarea");
+        }
+        
         Tarea tarea = new Tarea()
         {
             Id = model.Id,
