@@ -43,7 +43,7 @@ public class TableroController : Controller
 
         _tableroRepository.crearTablero(tablero, crearTableroViewModel.IdUsuarioPropietario);
 
-        return RedirectToAction("Index", "Login");
+        return RedirectToAction("Home", "Home");
     }
 
     [HttpGet]

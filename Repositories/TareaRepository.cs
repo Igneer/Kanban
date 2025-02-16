@@ -190,5 +190,33 @@ public class TareaRepository : ITareaRepository
             connection.Close();
 
         }       
-    } 
+
+    }
+    public void cambiarEstadoTarea(int idTarea, int estado)
+    {
+        if(estado == 5)
+        {
+            estado = 1;
+        }else{
+            estado++;
+        }
+        
+        string queryString = @"UPDATE tarea SET estado = @estado WHERE id = @idTarea";
+        
+        using(SqliteConnection connection = new SqliteConnection(connectionString))
+        {
+            connection.Open();
+
+            SqliteCommand command = new SqliteCommand(queryString, connection);
+
+            command.Parameters.AddWithValue("@estado", estado);
+            command.Parameters.AddWithValue("@idTarea", idTarea);
+
+            command.ExecuteNonQuery();
+
+            connection.Close();
+
+        }
+    }
+
 }

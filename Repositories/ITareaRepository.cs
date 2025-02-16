@@ -8,4 +8,5 @@ public interface ITareaRepository
     List<Tarea> obtenerTareasXTablero(int idTablero);
     void eliminarTarea(int idTarea);
     void asignarTarea(int idUsuario, int idTarea);
+    void cambiarEstadoTarea(int idTarea, int estado);
 }

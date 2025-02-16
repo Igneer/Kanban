@@ -87,4 +87,13 @@ public class TareaController : Controller
 
         return RedirectToAction("Index", "Login");
     }
+
+    [HttpPost]
+    [ServiceFilter(typeof(AuthorizeUserFilter))]
+    public IActionResult cambiarEstadoTarea(int id, int estado)
+    {
+        _tareaRepository.cambiarEstadoTarea(id, estado);
+
+        return RedirectToAction("Home", "Home");
+    }
 }
