@@ -1,0 +1,181 @@
+﻿@model Kanban.ViewModels.HomeViewModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+    @foreach(var tablero in Model.Tableros)
+    {
+        <table class="table table-bordered table-striped">
+            <div class="card-header bg-dark text-white text-center">
+                <h4 class="mb-0">@tablero.Nombre</h4>
+            </div>
+            <thead class="bg-secondary">
+                <tr class="text-center">
+                    <th>Ideas</th>
+                    <th>To Do</th>
+                    <th>Doing</th>
+                    <th>Review</th>
+                    <th>Done</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="w-20">
+                        @foreach (var tarea in Model.TareasPorTablero[tablero.Id].Where(t => t.Estado == EstadoTarea.Ideas))
+                        {
+                            <div class="card mb-2 text-center" style="width: 100%;">
+                                <div class="card-body">
+                                    <h6 class="card-title">@tarea.Nombre</h6>
+                                    <p class="card-text">@tarea.Descripcion</p>
+                                </div>
+                            </div>
+                        }
+                    </td>
+                    <td style="width: 20%;">
+                        @foreach (var tarea in Model.TareasPorTablero[tablero.Id].Where(t => t.Estado == EstadoTarea.ToDo))
+                        {
+                            <div class="card mb-2 text-center" style="width: 100%;">
+                                <div class="card-body">
+                                    <h6 class="card-title">@tarea.Nombre</h6>
+                                    <p class="card-text">@tarea.Descripcion</p>
+                                </div>
+                            </div>
+                        }
+                    </td>
+                    <td style="width: 20%;">
+                        @foreach (var tarea in Model.TareasPorTablero[tablero.Id].Where(t => t.Estado == EstadoTarea.Doing))
+                        {
+                            <div class="card mb-2 text-center" style="width: 100%;">
+                                <div class="card-body">
+                                    <h6 class="card-title">@tarea.Nombre</h6>
+                                    <p class="card-text">@tarea.Descripcion</p>
+                                </div>
+                            </div>
+                        }
+                    </td>
+                    <td style="width: 20%;">
+                        @foreach (var tarea in Model.TareasPorTablero[tablero.Id].Where(t => t.Estado == EstadoTarea.Review))
+                        {
+                            <div class="card mb-2 text-center" style="width: 100%;">
+                                <div class="card-body">
+                                    <h6 class="card-title">@tarea.Nombre</h6>
+                                    <p class="card-text">@tarea.Descripcion</p>
+                                </div>
+                            </div>
+                        }
+                    </td>
+                    <td style="width: 20%;">
+                        @foreach (var tarea in Model.TareasPorTablero[tablero.Id].Where(t => t.Estado == EstadoTarea.Done))
+                        {
+                            <div class="card mb-2 text-center" style="width: 100%;">
+                                <div class="card-body">
+                                    <h6 class="card-title">@tarea.Nombre</h6>
+                                    <p class="card-text">@tarea.Descripcion</p>
+                                </div>
+                            </div>
+                        }
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    }
+</div>
+
+@* @foreach(var tablero in Model.Tableros)
+{
+    <table class="table table-bordered table-striped">
+        <div class="card-header bg-dark text-white text-center">@tablero.Nombre</div>
+        <thead class="bg-secondary">
+            <tr class="text-center">
+                <th>Ideas</th>
+                <th>To Do</th>
+                <th>Doing</th>
+                <th>Review</th>
+                <th>Done</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    @foreach (var tarea in Model.TareasPorTablero[tablero.Id].Where(t => t.Estado == EstadoTarea.Ideas))
+                    {
+                        <div class="card mb-2 text-center w-25 p-4">
+                            <div class="card-body">
+                                <h6 class="card-title">@tarea.Nombre</h6>
+                                <p class="card-text">@tarea.Descripcion</p>
+                            </div>
+                        </div>
+                    }
+                </td>
+                <td>
+                    @foreach (var tarea in Model.TareasPorTablero[tablero.Id].Where(t => t.Estado == EstadoTarea.ToDo))
+                    {
+                        <div class="card mb-2 text-center">
+                            <div class="card-body">
+                                <h6 class="card-title">@tarea.Nombre</h6>
+                                <p class="card-text">@tarea.Descripcion</p>
+                            </div>
+                        </div>
+                    }
+                </td>
+                <td>
+                    @foreach (var tarea in Model.TareasPorTablero[tablero.Id].Where(t => t.Estado == EstadoTarea.Doing))
+                    {
+                        <div class="card mb-2 text-center">
+                            <div class="card-body">
+                                <h6 class="card-title">@tarea.Nombre</h6>
+                                <p class="card-text">@tarea.Descripcion</p>
+                            </div>
+                        </div>
+                    }
+                </td>
+                <td>
+                    @foreach (var tarea in Model.TareasPorTablero[tablero.Id].Where(t => t.Estado == EstadoTarea.Review))
+                    {
+                        <div class="card mb-2 text-center">
+                            <div class="card-body">
+                                <h6 class="card-title">@tarea.Nombre</h6>
+                                <p class="card-text">@tarea.Descripcion</p>
+                            </div>
+                        </div>
+                    }
+                </td>
+                <td>
+                    @foreach (var tarea in Model.TareasPorTablero[tablero.Id].Where(t => t.Estado == EstadoTarea.Done))
+                    {
+                        <div class="card mb-2 text-center">
+                            <div class="card-body">
+                                <h6 class="card-title">@tarea.Nombre</h6>
+                                <p class="card-text">@tarea.Descripcion</p>
+                            </div>
+                        </div>
+                    }
+                </td>
+            </tr>
+        </tbody>
+    </table>
+}
+
+<table>
+        <caption>Hola</caption>
+        <thead>
+            <tr>
+                <th>Ideas</th>
+                <th>To Do</th>
+                <th>Doing</th>
+                <th>Review</th>
+                <th>Done</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+            </tr>
+        </tbody>
+</table> *@
+
+@*      Ideas = 1,
+        ToDo = 2,
+        Doing = 3,
+        Review = 4,
+        Done = 5 *@

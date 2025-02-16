@@ -103,7 +103,10 @@ public class TableroRepository : ITableroRepository
     public List<Tablero> listarTablerosPorID(int idUsuario)
     {
         List<Tablero> tableros = new List<Tablero>();
-        string queryString = @"SELECT * FROM tablero WHERE id_usuario_propietario = @idUsuario";
+        string queryString =  @"SELECT DISTINCT t.id, t.id_usuario_propietario, t.nombre, t.descripcion 
+                                FROM tablero t
+                                LEFT JOIN tarea tar ON t.id = tar.id_tablero
+                                WHERE t.id_usuario_propietario = @idUsuario OR tar.id_usuario_asignado = @idUsuario";
         
         using(SqliteConnection connection = new SqliteConnection(connectionString))
         {
