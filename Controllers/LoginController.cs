@@ -32,7 +32,7 @@ public class LoginController : Controller
         HttpContext.Session.SetString("Nombre", usuario.NombreUsuario);
         HttpContext.Session.SetString("Rol", usuario.Rol.ToString());
 
-        return RedirectToAction("Home", "Home");
+        return RedirectToAction("Index", "Home");
     }
 
     [HttpGet]

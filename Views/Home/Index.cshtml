@@ -1,4 +1,5 @@
-﻿@model Kanban.ViewModels.HomeViewModel
+﻿@using Kanban.Models;
+@model Kanban.ViewModels.HomeViewModel
 
 @{
     ViewData["Title"] = "Home Page";
@@ -10,8 +11,14 @@
 
     @foreach(var tablero in Model.Tableros)
     {
-        <div class="card-header bg-dark text-white text-center">
+        <div class="card-header bg-dark text-white text-center d-flex justify-content-between align-items-center">
             <h4 class="mb-0">@tablero.Nombre</h4>
+            @{
+                if(tablero.IdUsuarioPropietario == Model.Id)
+                {
+                    <a class="btn btn-primary" asp-controller="Tablero" asp-action="IrAModificarTablero" asp-route-id=@tablero.Id>Modificar Tablero</a>
+                }
+            }
         </div>
         <div class="card-header bg-light text-dark text-center">
             <p>@tablero.Descripcion</p>
@@ -35,7 +42,11 @@
                                 <div class="card-body">
                                     <h6 class="card-title">@tarea.Nombre</h6>
                                     <p class="card-text">@tarea.Descripcion</p>
-                                    <a class="btn btn-success" asp-controller="Tarea" asp-action="cambiarEstadoTarea" asp-route-id="@tarea.Id" asp-route-estado="@((int)tarea.Estado)">-></a>
+                                    <form asp-controller="Tarea" asp-action="cambiarEstadoTarea" method="post">
+                                        <input type="hidden" name="id" value="@tarea.Id" />
+                                        <input type="hidden" name="estado" value="@((int)tarea.Estado)" />
+                                        <button type="submit" class="btn btn-success">-></button>
+                                    </form>
                                 </div>
                             </div>
                         }
@@ -47,6 +58,11 @@
                                 <div class="card-body">
                                     <h6 class="card-title">@tarea.Nombre</h6>
                                     <p class="card-text">@tarea.Descripcion</p>
+                                    <form asp-controller="Tarea" asp-action="cambiarEstadoTarea" method="post">
+                                        <input type="hidden" name="id" value="@tarea.Id" />
+                                        <input type="hidden" name="estado" value="@((int)tarea.Estado)" />
+                                        <button type="submit" class="btn btn-success">-></button>
+                                    </form>
                                 </div>
                             </div>
                         }
@@ -58,6 +74,11 @@
                                 <div class="card-body">
                                     <h6 class="card-title">@tarea.Nombre</h6>
                                     <p class="card-text">@tarea.Descripcion</p>
+                                    <form asp-controller="Tarea" asp-action="cambiarEstadoTarea" method="post">
+                                        <input type="hidden" name="id" value="@tarea.Id" />
+                                        <input type="hidden" name="estado" value="@((int)tarea.Estado)" />
+                                        <button type="submit" class="btn btn-success">-></button>
+                                    </form>
                                 </div>
                             </div>
                         }
@@ -69,6 +90,11 @@
                                 <div class="card-body">
                                     <h6 class="card-title">@tarea.Nombre</h6>
                                     <p class="card-text">@tarea.Descripcion</p>
+                                    <form asp-controller="Tarea" asp-action="cambiarEstadoTarea" method="post">
+                                        <input type="hidden" name="id" value="@tarea.Id" />
+                                        <input type="hidden" name="estado" value="@((int)tarea.Estado)" />
+                                        <button type="submit" class="btn btn-success">-></button>
+                                    </form>
                                 </div>
                             </div>
                         }
@@ -80,6 +106,11 @@
                                 <div class="card-body">
                                     <h6 class="card-title">@tarea.Nombre</h6>
                                     <p class="card-text">@tarea.Descripcion</p>
+                                    <form asp-controller="Tarea" asp-action="cambiarEstadoTarea" method="post">
+                                        <input type="hidden" name="id" value="@tarea.Id" />
+                                        <input type="hidden" name="estado" value="@((int)tarea.Estado)" />
+                                        <button type="submit" class="btn btn-success">-></button>
+                                    </form>
                                 </div>
                             </div>
                         }

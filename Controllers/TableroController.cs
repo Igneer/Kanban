@@ -43,7 +43,7 @@ public class TableroController : Controller
 
         _tableroRepository.crearTablero(tablero, crearTableroViewModel.IdUsuarioPropietario);
 
-        return RedirectToAction("Home", "Home");
+        return RedirectToAction("Index", "Home");
     }
 
     [HttpGet]
@@ -81,7 +81,7 @@ public class TableroController : Controller
 
         _tableroRepository.modificarTablero(modificarTableroViewModel.Id, tablero);
 
-        return RedirectToAction("Index", "Login");
+        return RedirectToAction("Index", "Home");
     }
 
     [HttpGet]
@@ -114,6 +114,6 @@ public class TableroController : Controller
     {
         _tableroRepository.eliminarTablero(id);
 
-        return RedirectToAction("Index", "Login");
+        return RedirectToAction("Index", "Home");
     }
 }

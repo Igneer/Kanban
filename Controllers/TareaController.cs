@@ -94,6 +94,6 @@ public class TareaController : Controller
     {
         _tareaRepository.cambiarEstadoTarea(id, estado);
 
-        return RedirectToAction("Home", "Home");
+        return RedirectToAction("Index", "Home");
     }
 }

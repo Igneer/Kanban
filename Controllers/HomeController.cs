@@ -17,7 +17,7 @@ public class HomeController : Controller
 
    [HttpGet]
     [ServiceFilter(typeof(AuthorizeUserFilter))]
-    public IActionResult Home()
+    public IActionResult Index()
     {
         int id = HttpContext.Session.GetInt32("Id").Value;
         string nombre = HttpContext.Session.GetString("Nombre");
