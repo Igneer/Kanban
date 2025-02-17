@@ -192,13 +192,26 @@ public class TareaRepository : ITareaRepository
         }       
 
     }
-    public void cambiarEstadoTarea(int idTarea, int estado)
+    public void cambiarEstadoTarea(int idTarea, int estado, int direccion)
     {
-        if(estado == 5)
+        switch(direccion)
+        {
+            case 1:
+                estado++;
+                break;
+            case 2:
+                estado--;
+                break;
+            default:
+                break;
+        }
+
+        if(estado > 5)
         {
             estado = 1;
-        }else{
-            estado++;
+        }else if(estado < 1)
+        {
+            estado = 5;
         }
         
         string queryString = @"UPDATE tarea SET estado = @estado WHERE id = @idTarea";

@@ -13,9 +13,14 @@ public class TareaController : Controller
 
     [HttpGet]
     [ServiceFilter(typeof(AuthorizeUserFilter))]
-    public IActionResult IrACrearTarea()
+    public IActionResult IrACrearTarea(int idTablero)
     {
-        return View();
+        CrearTareaViewModel model = new CrearTareaViewModel()
+        {
+            IdTablero = idTablero
+        };
+
+        return View(model);
     }
 
     [HttpPost]
@@ -39,7 +44,7 @@ public class TareaController : Controller
 
         _tareaRepository.crearTarea(tarea, model.IdTablero);
 
-        return RedirectToAction("Index", "Login");
+        return RedirectToAction("Index", "Home");
     }
 
     [HttpGet]
@@ -76,7 +81,7 @@ public class TareaController : Controller
 
         _tareaRepository.modificarTarea(model.Id, tarea);
 
-        return RedirectToAction("Index", "Login");
+        return RedirectToAction("Index", "Home");
     }
 
     [HttpPost]
@@ -85,14 +90,14 @@ public class TareaController : Controller
     {
         _tareaRepository.eliminarTarea(id);
 
-        return RedirectToAction("Index", "Login");
+        return RedirectToAction("Index", "Home");
     }
 
     [HttpPost]
     [ServiceFilter(typeof(AuthorizeUserFilter))]
-    public IActionResult cambiarEstadoTarea(int id, int estado)
+    public IActionResult cambiarEstadoTarea(int id, int estado, int direccion)
     {
-        _tareaRepository.cambiarEstadoTarea(id, estado);
+        _tareaRepository.cambiarEstadoTarea(id, estado, direccion);
 
         return RedirectToAction("Index", "Home");
     }
