@@ -50,13 +50,29 @@
                                             <input type="hidden" name="id" value="@tarea.Id" />
                                             <input type="hidden" name="estado" value="@((int)tarea.Estado)"/>
                                             <input type="hidden" name="direccion" value="2"/>
-                                            <button type="submit" class="btn btn-success">⬅</button>
+                                            <button type="submit" class="btn btn-success">
+                                                <i class="bi bi-arrow-left"></i>
+                                            </button>
                                         </form>
+                                        @if(tablero.IdUsuarioPropietario == Model.Id)
+                                        {
+                                            <form asp-controller="Tarea" asp-action="EliminarTarea" method="post">
+                                                <input type="hidden" name="id" value="@tarea.Id" />
+                                                <button type="submit" onclick="return confirm('¿Está seguro de eliminar?')" class="btn btn-danger">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                            <a class="btn btn-primary" asp-action="IrAModificarTarea" asp-controller="Tarea" asp-route-id=@tarea.Id>
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                        }
                                         <form asp-controller="Tarea" asp-action="cambiarEstadoTarea" method="post">
                                             <input type="hidden" name="id" value="@tarea.Id" />
                                             <input type="hidden" name="estado" value="@((int)tarea.Estado)" />
                                             <input type="hidden" name="direccion" value="1"/>
-                                            <button type="submit" class="btn btn-success">⮕</button>
+                                            <button type="submit" class="btn btn-success">
+                                                <i class="bi bi-arrow-right"></i>
+                                            </button>
                                         </form>
                                     </div>
                                 </div>
@@ -75,13 +91,29 @@
                                             <input type="hidden" name="id" value="@tarea.Id" />
                                             <input type="hidden" name="estado" value="@((int)tarea.Estado)"/>
                                             <input type="hidden" name="direccion" value="2"/>
-                                            <button type="submit" class="btn btn-success">⬅</button>
+                                            <button type="submit" class="btn btn-success">
+                                                <i class="bi bi-arrow-left"></i>
+                                            </button>
                                         </form>
+                                        @if(tablero.IdUsuarioPropietario == Model.Id)
+                                        {
+                                            <form asp-controller="Tarea" asp-action="EliminarTarea" method="post">
+                                                <input type="hidden" name="id" value="@tarea.Id" />
+                                                <button type="submit" onclick="return confirm('¿Está seguro de eliminar?')" class="btn btn-danger">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                            <a class="btn btn-primary" asp-action="IrAModificarTarea" asp-controller="Tarea" asp-route-id=@tarea.Id>
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                        }
                                         <form asp-controller="Tarea" asp-action="cambiarEstadoTarea" method="post">
                                             <input type="hidden" name="id" value="@tarea.Id" />
                                             <input type="hidden" name="estado" value="@((int)tarea.Estado)" />
                                             <input type="hidden" name="direccion" value="1"/>
-                                            <button type="submit" class="btn btn-success">⮕</button>
+                                            <button type="submit" class="btn btn-success">
+                                                <i class="bi bi-arrow-right"></i>
+                                            </button>
                                         </form>
                                     </div>
                                 </div>
@@ -100,13 +132,29 @@
                                             <input type="hidden" name="id" value="@tarea.Id" />
                                             <input type="hidden" name="estado" value="@((int)tarea.Estado)"/>
                                             <input type="hidden" name="direccion" value="2"/>
-                                            <button type="submit" class="btn btn-success">⬅</button>
+                                            <button type="submit" class="btn btn-success">
+                                                <i class="bi bi-arrow-left"></i>
+                                            </button>
                                         </form>
+                                        @if(tablero.IdUsuarioPropietario == Model.Id)
+                                        {
+                                            <form asp-controller="Tarea" asp-action="EliminarTarea" method="post">
+                                                <input type="hidden" name="id" value="@tarea.Id" />
+                                                <button type="submit" onclick="return confirm('¿Está seguro de eliminar?')" class="btn btn-danger">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                            <a class="btn btn-primary" asp-action="IrAModificarTarea" asp-controller="Tarea" asp-route-id=@tarea.Id>
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                        }
                                         <form asp-controller="Tarea" asp-action="cambiarEstadoTarea" method="post">
                                             <input type="hidden" name="id" value="@tarea.Id" />
                                             <input type="hidden" name="estado" value="@((int)tarea.Estado)" />
                                             <input type="hidden" name="direccion" value="1"/>
-                                            <button type="submit" class="btn btn-success">⮕</button>
+                                            <button type="submit" class="btn btn-success">
+                                                <i class="bi bi-arrow-right"></i>
+                                            </button>
                                         </form>
                                     </div>
                                 </div>
@@ -125,13 +173,29 @@
                                             <input type="hidden" name="id" value="@tarea.Id" />
                                             <input type="hidden" name="estado" value="@((int)tarea.Estado)"/>
                                             <input type="hidden" name="direccion" value="2"/>
-                                            <button type="submit" class="btn btn-success">⬅</button>
+                                            <button type="submit" class="btn btn-success">
+                                                <i class="bi bi-arrow-left"></i>
+                                            </button>
                                         </form>
+                                        @if(tablero.IdUsuarioPropietario == Model.Id)
+                                        {
+                                            <form asp-controller="Tarea" asp-action="EliminarTarea" method="post">
+                                                <input type="hidden" name="id" value="@tarea.Id" />
+                                                <button type="submit" onclick="return confirm('¿Está seguro de eliminar?')" class="btn btn-danger">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                            <a class="btn btn-primary" asp-action="IrAModificarTarea" asp-controller="Tarea" asp-route-id=@tarea.Id>
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                        }
                                         <form asp-controller="Tarea" asp-action="cambiarEstadoTarea" method="post">
                                             <input type="hidden" name="id" value="@tarea.Id" />
                                             <input type="hidden" name="estado" value="@((int)tarea.Estado)" />
                                             <input type="hidden" name="direccion" value="1"/>
-                                            <button type="submit" class="btn btn-success">⮕</button>
+                                            <button type="submit" class="btn btn-success">
+                                                <i class="bi bi-arrow-right"></i>
+                                            </button>
                                         </form>
                                     </div>
                                 </div>
@@ -150,13 +214,29 @@
                                             <input type="hidden" name="id" value="@tarea.Id" />
                                             <input type="hidden" name="estado" value="@((int)tarea.Estado)"/>
                                             <input type="hidden" name="direccion" value="2"/>
-                                            <button type="submit" class="btn btn-success">⬅</button>
+                                            <button type="submit" class="btn btn-success">
+                                                <i class="bi bi-arrow-left"></i>
+                                            </button>
                                         </form>
+                                        @if(tablero.IdUsuarioPropietario == Model.Id)
+                                        {
+                                            <form asp-controller="Tarea" asp-action="EliminarTarea" method="post">
+                                                <input type="hidden" name="id" value="@tarea.Id" />
+                                                <button type="submit" onclick="return confirm('¿Está seguro de eliminar?')" class="btn btn-danger">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                            <a class="btn btn-primary" asp-action="IrAModificarTarea" asp-controller="Tarea" asp-route-id=@tarea.Id>
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                        }
                                         <form asp-controller="Tarea" asp-action="cambiarEstadoTarea" method="post">
                                             <input type="hidden" name="id" value="@tarea.Id" />
                                             <input type="hidden" name="estado" value="@((int)tarea.Estado)" />
                                             <input type="hidden" name="direccion" value="1"/>
-                                            <button type="submit" class="btn btn-success">⮕</button>
+                                            <button type="submit" class="btn btn-success">
+                                                <i class="bi bi-arrow-right"></i>
+                                            </button>
                                         </form>
                                     </div>
                                 </div>
