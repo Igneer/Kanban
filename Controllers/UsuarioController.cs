@@ -37,7 +37,7 @@ public class UsuarioController : Controller
 
         _usuarioRepository.crearUsuario(usuario);
 
-        return RedirectToAction("Index", "Login");
+        return RedirectToAction("Index", "Home");
     }
 
     [HttpGet]
@@ -80,7 +80,7 @@ public class UsuarioController : Controller
 
         _usuarioRepository.modificarUsuario(model.Id, usuario);
 
-        return RedirectToAction("Index", "Login");
+        return RedirectToAction("Index", "Home");
     }
 
     [HttpGet]
@@ -102,7 +102,7 @@ public class UsuarioController : Controller
     {
         _usuarioRepository.eliminarUsuario(id);
 
-        return RedirectToAction("Index", "Login");
+        return RedirectToAction("Index", "Home");
     }
 
 }

@@ -26,6 +26,63 @@
         <table class="table table-bordered table-striped">
             <thead class="bg-secondary">
                 <tr class="text-center">
+                    <th class="w-25">Ideas</th>
+                    <th class="w-25">To Do</th>
+                    <th class="w-25">Doing</th>
+                    <th class="w-25">Review</th>
+                    <th class="w-25">Done</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    @foreach(var estado in Enum.GetValues(typeof(EstadoTarea)).Cast<EstadoTarea>())
+                    {
+                        <td class="w-10">
+                            @if(estado == EstadoTarea.Ideas)
+                            {
+                                <div class="text-center">
+                                    <a class="btn btn-success m-2" asp-controller="Tarea" asp-action="IrACrearTarea">+</a>
+                                </div>
+                            }	
+                            @foreach (var tarea in Model.TareasPorTablero[tablero.Id].Where(t => t.Estado == estado))
+                            {
+                                <partial name="TaskCard" model="tarea" view-data='@new ViewDataDictionary(ViewData) { { "Tablero", tablero }, { "UsuarioId", Model.Id } }' />
+                            }
+                        </td>
+                    }
+                </tr>
+            </tbody>
+        </table> 
+    }
+
+@* @using Kanban.Models;
+@model Kanban.ViewModels.HomeViewModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+    <div class = "text-center m-4">
+        <a class="btn btn-success" asp-controller="Tablero" asp-action="IrACrearTablero">Crear Tablero</a>
+    </div>
+
+    @foreach(var tablero in Model.Tableros)
+    {
+        <div class="card-header bg-dark text-white text-center d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">@tablero.Nombre</h4>
+            @{
+                if(tablero.IdUsuarioPropietario == Model.Id)
+                {
+                    <a class="btn btn-primary" asp-controller="Tablero" asp-action="IrAModificarTablero" asp-route-id=@tablero.Id>Modificar Tablero</a>
+                }
+            }
+        </div>
+        <div class="card-header bg-light text-dark text-center">
+            <p>@tablero.Descripcion</p>
+        </div>
+        <table class="table table-bordered table-striped">
+            <thead class="bg-secondary">
+                <tr class="text-center">
                     <th>Ideas</th>
                     <th>To Do</th>
                     <th>Doing</th>
@@ -36,17 +93,38 @@
             <tbody>
                 <tr>
                     <td class="w-20">
+                        <div class="text-center">
+                            <a class="btn btn-success m-2" asp-controller="Tarea" asp-action="IrACrearTarea">+</a>
+                        </div>
                         @foreach (var tarea in Model.TareasPorTablero[tablero.Id].Where(t => t.Estado == EstadoTarea.Ideas))
                         {
                             <div class="card mb-2 text-center" style="width: 100%;">
                                 <div class="card-body">
                                     <h6 class="card-title">@tarea.Nombre</h6>
                                     <p class="card-text">@tarea.Descripcion</p>
-                                    <form asp-controller="Tarea" asp-action="cambiarEstadoTarea" method="post">
-                                        <input type="hidden" name="id" value="@tarea.Id" />
-                                        <input type="hidden" name="estado" value="@((int)tarea.Estado)" />
-                                        <button type="submit" class="btn btn-success">-></button>
-                                    </form>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <form asp-controller="Tarea" asp-action="cambiarEstadoTarea" method="post">
+                                            <input type="hidden" name="id" value="@tarea.Id" />
+                                            <input type="hidden" name="estado" value="@((int)tarea.Estado)" />
+                                            <input type="hidden" name="direccion" value="2" />
+                                            <input type="submit" class="btn btn-success bi bi-arrow-left" value="←">
+                                        </form>
+                                        @if(tablero.IdUsuarioPropietario == Model.Id)
+                                        {
+                                            <form asp-controller="Tarea" asp-action="eliminarTarea" method="post">
+                                                <input type="hidden" name="id" value="@tarea.Id" />
+                                                <button type="submit" onclick="return confirm('¿Está seguro de eliminar?')" class="btn btn-danger">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                        }
+                                        <form asp-controller="Tarea" asp-action="cambiarEstadoTarea" method="post">
+                                            <input type="hidden" name="id" value="@tarea.Id" />
+                                            <input type="hidden" name="estado" value="@((int)tarea.Estado)" />
+                                            <input type="hidden" name="direccion" value="1" />
+                                            <input type="submit" class="btn btn-success" value="→">
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         }
@@ -58,11 +136,29 @@
                                 <div class="card-body">
                                     <h6 class="card-title">@tarea.Nombre</h6>
                                     <p class="card-text">@tarea.Descripcion</p>
-                                    <form asp-controller="Tarea" asp-action="cambiarEstadoTarea" method="post">
-                                        <input type="hidden" name="id" value="@tarea.Id" />
-                                        <input type="hidden" name="estado" value="@((int)tarea.Estado)" />
-                                        <button type="submit" class="btn btn-success">-></button>
-                                    </form>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <form asp-controller="Tarea" asp-action="cambiarEstadoTarea" method="post">
+                                            <input type="hidden" name="id" value="@tarea.Id" />
+                                            <input type="hidden" name="estado" value="@((int)tarea.Estado)" />
+                                            <input type="hidden" name="direccion" value="2" />
+                                            <input type="submit" class="btn btn-success" value="←">
+                                        </form>
+                                        @if(tablero.IdUsuarioPropietario == Model.Id)
+                                        {
+                                            <form asp-controller="Tarea" asp-action="eliminarTarea" method="post">
+                                                <input type="hidden" name="id" value="@tarea.Id" />
+                                                <button type="submit" onclick="return confirm('¿Está seguro de eliminar?')" class="btn btn-danger">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                        }
+                                        <form asp-controller="Tarea" asp-action="cambiarEstadoTarea" method="post">
+                                            <input type="hidden" name="id" value="@tarea.Id" />
+                                            <input type="hidden" name="estado" value="@((int)tarea.Estado)" />
+                                            <input type="hidden" name="direccion" value="1" />
+                                            <input type="submit" class="btn btn-success" value="→">
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         }
@@ -74,11 +170,29 @@
                                 <div class="card-body">
                                     <h6 class="card-title">@tarea.Nombre</h6>
                                     <p class="card-text">@tarea.Descripcion</p>
-                                    <form asp-controller="Tarea" asp-action="cambiarEstadoTarea" method="post">
-                                        <input type="hidden" name="id" value="@tarea.Id" />
-                                        <input type="hidden" name="estado" value="@((int)tarea.Estado)" />
-                                        <button type="submit" class="btn btn-success">-></button>
-                                    </form>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <form asp-controller="Tarea" asp-action="cambiarEstadoTarea" method="post">
+                                            <input type="hidden" name="id" value="@tarea.Id" />
+                                            <input type="hidden" name="estado" value="@((int)tarea.Estado)" />
+                                            <input type="hidden" name="direccion" value="2" />
+                                            <input type="submit" class="btn btn-success" value="←">
+                                        </form>
+                                       @if(tablero.IdUsuarioPropietario == Model.Id)
+                                        {
+                                            <form asp-controller="Tarea" asp-action="eliminarTarea" method="post">
+                                                <input type="hidden" name="id" value="@tarea.Id" />
+                                                <button type="submit" onclick="return confirm('¿Está seguro de eliminar?')" class="btn btn-danger">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                        }
+                                        <form asp-controller="Tarea" asp-action="cambiarEstadoTarea" method="post">
+                                            <input type="hidden" name="id" value="@tarea.Id" />
+                                            <input type="hidden" name="estado" value="@((int)tarea.Estado)" />
+                                            <input type="hidden" name="direccion" value="1" />
+                                            <input type="submit" class="btn btn-success" value="→">
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         }
@@ -90,11 +204,29 @@
                                 <div class="card-body">
                                     <h6 class="card-title">@tarea.Nombre</h6>
                                     <p class="card-text">@tarea.Descripcion</p>
-                                    <form asp-controller="Tarea" asp-action="cambiarEstadoTarea" method="post">
-                                        <input type="hidden" name="id" value="@tarea.Id" />
-                                        <input type="hidden" name="estado" value="@((int)tarea.Estado)" />
-                                        <button type="submit" class="btn btn-success">-></button>
-                                    </form>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <form asp-controller="Tarea" asp-action="cambiarEstadoTarea" method="post">
+                                            <input type="hidden" name="id" value="@tarea.Id" />
+                                            <input type="hidden" name="estado" value="@((int)tarea.Estado)" />
+                                            <input type="hidden" name="direccion" value="2" />
+                                            <input type="submit" class="btn btn-success" value="←">
+                                        </form>
+                                        @if(tablero.IdUsuarioPropietario == Model.Id)
+                                        {
+                                            <form asp-controller="Tarea" asp-action="eliminarTarea" method="post">
+                                                <input type="hidden" name="id" value="@tarea.Id" />
+                                                <button type="submit" onclick="return confirm('¿Está seguro de eliminar?')" class="btn btn-danger">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                        }
+                                        <form asp-controller="Tarea" asp-action="cambiarEstadoTarea" method="post">
+                                            <input type="hidden" name="id" value="@tarea.Id" />
+                                            <input type="hidden" name="estado" value="@((int)tarea.Estado)" />
+                                            <input type="hidden" name="direccion" value="1" />
+                                            <input type="submit" class="btn btn-success" value="→">
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         }
@@ -106,11 +238,29 @@
                                 <div class="card-body">
                                     <h6 class="card-title">@tarea.Nombre</h6>
                                     <p class="card-text">@tarea.Descripcion</p>
-                                    <form asp-controller="Tarea" asp-action="cambiarEstadoTarea" method="post">
-                                        <input type="hidden" name="id" value="@tarea.Id" />
-                                        <input type="hidden" name="estado" value="@((int)tarea.Estado)" />
-                                        <button type="submit" class="btn btn-success">-></button>
-                                    </form>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <form asp-controller="Tarea" asp-action="cambiarEstadoTarea" method="post">
+                                            <input type="hidden" name="id" value="@tarea.Id" />
+                                            <input type="hidden" name="estado" value="@((int)tarea.Estado)" />
+                                            <input type="hidden" name="direccion" value="2" />
+                                            <input type="submit" class="btn btn-success" value="←">
+                                        </form>
+                                        @if(tablero.IdUsuarioPropietario == Model.Id)
+                                        {
+                                            <form asp-controller="Tarea" asp-action="eliminarTarea" method="post">
+                                                <input type="hidden" name="id" value="@tarea.Id" />
+                                                <button type="submit" onclick="return confirm('¿Está seguro de eliminar?')" class="btn btn-danger">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                        }
+                                        <form asp-controller="Tarea" asp-action="cambiarEstadoTarea" method="post">
+                                            <input type="hidden" name="id" value="@tarea.Id" />
+                                            <input type="hidden" name="estado" value="@((int)tarea.Estado)" />
+                                            <input type="hidden" name="direccion" value="1" />
+                                            <input type="submit" class="btn btn-success" value="→">
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         }
@@ -118,100 +268,8 @@
                 </tr>
             </tbody>
         </table>
-    }
-</div>
+    } *@
 
-@* @foreach(var tablero in Model.Tableros)
-{
-    <table class="table table-bordered table-striped">
-        <div class="card-header bg-dark text-white text-center">@tablero.Nombre</div>
-        <thead class="bg-secondary">
-            <tr class="text-center">
-                <th>Ideas</th>
-                <th>To Do</th>
-                <th>Doing</th>
-                <th>Review</th>
-                <th>Done</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>
-                    @foreach (var tarea in Model.TareasPorTablero[tablero.Id].Where(t => t.Estado == EstadoTarea.Ideas))
-                    {
-                        <div class="card mb-2 text-center w-25 p-4">
-                            <div class="card-body">
-                                <h6 class="card-title">@tarea.Nombre</h6>
-                                <p class="card-text">@tarea.Descripcion</p>
-                            </div>
-                        </div>
-                    }
-                </td>
-                <td>
-                    @foreach (var tarea in Model.TareasPorTablero[tablero.Id].Where(t => t.Estado == EstadoTarea.ToDo))
-                    {
-                        <div class="card mb-2 text-center">
-                            <div class="card-body">
-                                <h6 class="card-title">@tarea.Nombre</h6>
-                                <p class="card-text">@tarea.Descripcion</p>
-                            </div>
-                        </div>
-                    }
-                </td>
-                <td>
-                    @foreach (var tarea in Model.TareasPorTablero[tablero.Id].Where(t => t.Estado == EstadoTarea.Doing))
-                    {
-                        <div class="card mb-2 text-center">
-                            <div class="card-body">
-                                <h6 class="card-title">@tarea.Nombre</h6>
-                                <p class="card-text">@tarea.Descripcion</p>
-                            </div>
-                        </div>
-                    }
-                </td>
-                <td>
-                    @foreach (var tarea in Model.TareasPorTablero[tablero.Id].Where(t => t.Estado == EstadoTarea.Review))
-                    {
-                        <div class="card mb-2 text-center">
-                            <div class="card-body">
-                                <h6 class="card-title">@tarea.Nombre</h6>
-                                <p class="card-text">@tarea.Descripcion</p>
-                            </div>
-                        </div>
-                    }
-                </td>
-                <td>
-                    @foreach (var tarea in Model.TareasPorTablero[tablero.Id].Where(t => t.Estado == EstadoTarea.Done))
-                    {
-                        <div class="card mb-2 text-center">
-                            <div class="card-body">
-                                <h6 class="card-title">@tarea.Nombre</h6>
-                                <p class="card-text">@tarea.Descripcion</p>
-                            </div>
-                        </div>
-                    }
-                </td>
-            </tr>
-        </tbody>
-    </table>
-}
-
-<table>
-        <caption>Hola</caption>
-        <thead>
-            <tr>
-                <th>Ideas</th>
-                <th>To Do</th>
-                <th>Doing</th>
-                <th>Review</th>
-                <th>Done</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-            </tr>
-        </tbody>
-</table> *@
 
 @*      Ideas = 1,
         ToDo = 2,
