@@ -28,9 +28,9 @@ public class LoginController : Controller
             return View("IrAIniciarSesion");  
         } 
 
-        HttpContext.Session.SetInt32("Id", usuario.Id);
-        HttpContext.Session.SetString("Nombre", usuario.NombreUsuario);
-        HttpContext.Session.SetString("Rol", usuario.Rol.ToString());
+        HttpContext.Session.SetInt32("Id",usuario.Id);
+        HttpContext.Session.SetString("Nombre",usuario.NombreUsuario);
+        HttpContext.Session.SetString("Rol",usuario.Rol.ToString());
 
         return RedirectToAction("Index", "Home");
     }
@@ -40,7 +40,7 @@ public class LoginController : Controller
     {
         Response.Cookies.Delete("AuthCookie");
         HttpContext.Session.Clear();
-        return RedirectToAction("Login");
+        return RedirectToAction("IrAIniciarSesion");
     }
 
 }

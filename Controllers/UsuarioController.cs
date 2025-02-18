@@ -37,7 +37,7 @@ public class UsuarioController : Controller
 
         _usuarioRepository.crearUsuario(usuario);
 
-        return RedirectToAction("Index", "Login");
+        return RedirectToAction("Index", "Home");
     }
 
     [HttpGet]
@@ -53,7 +53,6 @@ public class UsuarioController : Controller
         {
             Id = usuario.Id,
             NombreUsuario = usuario.NombreUsuario,
-            Password = usuario.Password,
             Rol = usuario.Rol
         };
 
@@ -74,13 +73,12 @@ public class UsuarioController : Controller
         {
             Id = model.Id,
             NombreUsuario = model.NombreUsuario,
-            Password = model.Password,
             Rol = model.Rol
         };
 
         _usuarioRepository.modificarUsuario(model.Id, usuario);
 
-        return RedirectToAction("Index", "Login");
+        return RedirectToAction("Index", "Home");
     }
 
     [HttpGet]
@@ -102,7 +100,7 @@ public class UsuarioController : Controller
     {
         _usuarioRepository.eliminarUsuario(id);
 
-        return RedirectToAction("Index", "Login");
+        return RedirectToAction("Index", "Home");
     }
 
 }
