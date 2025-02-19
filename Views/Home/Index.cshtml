@@ -16,6 +16,7 @@
             @{
                 if(tablero.IdUsuarioPropietario == Model.Id)
                 {
+                    <a class="btn btn-primary" asp-controller="Tarea" asp-action="IrAsignarTareas" asp-route-idTablero=@tablero.Id>Asignar Tareas</a>
                     <a class="btn btn-primary" asp-controller="Tablero" asp-action="IrAModificarTablero" asp-route-id=@tablero.Id>Modificar Tablero</a>
                 }
             }

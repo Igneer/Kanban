@@ -6,9 +6,11 @@ using Kanban.ViewModels;
 public class TareaController : Controller
 {
     private readonly ITareaRepository _tareaRepository;
-    public TareaController(ITareaRepository tareaRepository)
+    private readonly IFachadaTarea _fachadaTarea;
+    public TareaController(ITareaRepository tareaRepository, IFachadaTarea fachadaTarea)
     {
         _tareaRepository = tareaRepository;
+        _fachadaTarea = fachadaTarea;
     }
 
     [HttpGet]
@@ -98,6 +100,28 @@ public class TareaController : Controller
     public IActionResult cambiarEstadoTarea(int id, int estado, int direccion)
     {
         _tareaRepository.cambiarEstadoTarea(id, estado, direccion);
+
+        return RedirectToAction("Index", "Home");
+    }
+
+    [HttpGet]
+    [ServiceFilter(typeof(AuthorizeUserFilter))]
+    public IActionResult IrAsignarTareas(int idTablero)
+    {
+        AsignarTareasViewModel model = new AsignarTareasViewModel()
+        {
+            Tareas = _fachadaTarea.obtenerTareasXTablero(idTablero),
+            Usuarios = _fachadaTarea.obtenerUsuarios()
+        };
+
+        return View(model);
+    }
+
+    [HttpPost]
+    [ServiceFilter(typeof(AuthorizeUserFilter))]
+    public IActionResult asignarTarea(int idUsuario, int idTarea)
+    {
+        _fachadaTarea.asignarTarea(idUsuario, idTarea);
 
         return RedirectToAction("Index", "Home");
     }

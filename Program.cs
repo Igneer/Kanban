@@ -9,6 +9,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<ITableroRepository, TableroRepository>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<ITareaRepository, TareaRepository>();
+builder.Services.AddScoped<IFachadaTarea, FachadaTarea>();
+
 
 //Agregar servicios de sesion
 builder.Services.AddDistributedMemoryCache();

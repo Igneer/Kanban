@@ -1,0 +1,37 @@
+@model Kanban.ViewModels.AsignarTareasViewModel
+
+@{
+    ViewData["Title"] = "Listar Tareas del Tablero";
+}
+
+<div class="text-center">
+    <h2>Tareas del Tablero</h2>
+</div>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var tarea in Model.Tareas)
+        {
+            <tr>
+                <td>@tarea.Nombre</td>
+                <td>
+                    <form asp-action="asignarTarea" method="post">
+                        <input type="hidden" name="idTarea" value="@tarea.Id" />
+                        <select name="idUsuario" id="">
+                            @foreach (var usuario in Model.Usuarios)
+                            {
+                                <option value="@usuario.Id">@usuario.NombreUsuario</option>
+                            }
+                        </select>
+                        <button type="submit" class="btn btn-success">Asignar</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
