@@ -24,7 +24,7 @@ public class LoginController : Controller
         if(!ModelState.IsValid)
         {
             TempData["ErrorMessage"] = "Por favor, revisa los campos ingresados. Algunos datos no son válidos.";
-            return RedirectToAction("IrAIniciarSesion", "Login"); 
+            return RedirectToAction("Index", "Error"); 
         }
 
         try

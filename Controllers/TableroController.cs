@@ -32,21 +32,38 @@ public class TableroController : Controller
     [ServiceFilter(typeof(AuthorizeUserFilter))]
     public IActionResult crearTablero(CrearTableroViewModel crearTableroViewModel)
     {
-        if(!ModelState.IsValid) 
+        if(!ModelState.IsValid)
         {
-            return View("IrACrearTablero");
+            TempData["ErrorMessage"] = "Por favor, revisa los campos ingresados. Algunos datos no son válidos.";
+            return RedirectToAction("Index", "Error"); 
         }
 
-        Tablero tablero = new Tablero()
+        try
         {
-            IdUsuarioPropietario = crearTableroViewModel.IdUsuarioPropietario,
-            Nombre = crearTableroViewModel.Nombre,
-            Descripcion = crearTableroViewModel.Descripcion
-        };
+            Tablero tablero = new Tablero()
+            {
+                IdUsuarioPropietario = crearTableroViewModel.IdUsuarioPropietario,
+                Nombre = crearTableroViewModel.Nombre,
+                Descripcion = crearTableroViewModel.Descripcion
+            };
 
-        _tableroRepository.crearTablero(tablero, crearTableroViewModel.IdUsuarioPropietario);
+            _tableroRepository.crearTablero(tablero, crearTableroViewModel.IdUsuarioPropietario);
 
-        return RedirectToAction("Index", "Home");
+            _logger.LogInformation("Tablero creado con éxito");
+
+            return RedirectToAction("Index", "Home");
+        }catch(SqliteException ex)
+        {
+            _logger.LogError(ex.ToString());
+            TempData["ErrorMessage"] = "Ocurrió un error en la base de datos. Por favor, intentelo nuevamente";
+            return RedirectToAction("Index", "Error");
+        }
+        catch(Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            TempData["ErrorMessage"] = "Ocurrio un error inesperado. Por favor, intentelo de nuevo";
+            return RedirectToAction("Index", "Error");
+        }
     }
 
     [HttpGet]
@@ -70,45 +87,93 @@ public class TableroController : Controller
     [ServiceFilter(typeof(AuthorizeUserFilter))]
     public IActionResult modificarTablero(ModificarTableroViewModel modificarTableroViewModel)
     {
-        if(!ModelState.IsValid) 
+        if(!ModelState.IsValid)
         {
-            return View("IrAModificarTablero");
+            TempData["ErrorMessage"] = "Por favor, revisa los campos ingresados. Algunos datos no son válidos.";
+            return RedirectToAction("Index", "Error"); 
         }
 
-        Tablero tablero = new Tablero()
+        try
         {
-            Id = modificarTableroViewModel.Id,
-            Nombre = modificarTableroViewModel.Nombre,
-            Descripcion = modificarTableroViewModel.Descripcion
-        };
+            Tablero tablero = new Tablero()
+            {
+                Id = modificarTableroViewModel.Id,
+                Nombre = modificarTableroViewModel.Nombre,
+                Descripcion = modificarTableroViewModel.Descripcion
+            };
 
-        _tableroRepository.modificarTablero(modificarTableroViewModel.Id, tablero);
+            _tableroRepository.modificarTablero(modificarTableroViewModel.Id, tablero);
 
-        return RedirectToAction("Index", "Home");
+            _logger.LogInformation("Tablero modificado con éxito");
+
+            return RedirectToAction("Index", "Home");
+        }catch(SqliteException ex)
+        {
+            _logger.LogError(ex.ToString());
+            TempData["ErrorMessage"] = "Ocurrió un error en la base de datos. Por favor, intentelo nuevamente";
+            return RedirectToAction("Index", "Error");
+        }
+        catch(Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            TempData["ErrorMessage"] = "Ocurrio un error inesperado. Por favor, intentelo de nuevo";
+            return RedirectToAction("Index", "Error");
+        }
     }
 
     [HttpGet]
     [ServiceFilter(typeof(AuthorizeUserFilter))]
     public IActionResult listarTableros()
     {
-        ListarTablerosViewModel listarTablerosViewModel = new ListarTablerosViewModel()
+        try
         {
-            Tableros = _tableroRepository.listarTableros()
-        };
-    
-        return View(listarTablerosViewModel);
+            ListarTablerosViewModel listarTablerosViewModel = new ListarTablerosViewModel()
+            {
+                Tableros = _tableroRepository.listarTableros()
+            };
+
+            _logger.LogInformation("Listado de tableros obtenido con éxito");
+        
+            return View(listarTablerosViewModel);
+
+        }catch(SqliteException ex)
+        {
+            _logger.LogError(ex.ToString());
+            TempData["ErrorMessage"] = "Ocurrió un error en la base de datos. Por favor, intentelo nuevamente";
+            return RedirectToAction("Index", "Error");
+        }
+        catch(Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            TempData["ErrorMessage"] = "Ocurrio un error inesperado. Por favor, intentelo de nuevo";
+            return RedirectToAction("Index", "Error");
+        }
     }
 
     [HttpGet]
     [ServiceFilter(typeof(AuthorizeUserFilter))]
     public IActionResult listarTablerosPorID(int idUsuario)
     {
-        ListarTablerosViewModel listarTablerosViewModel = new ListarTablerosViewModel()
+        try
         {
-            Tableros = _tableroRepository.listarTablerosPorID(idUsuario)
-        };
+            ListarTablerosViewModel listarTablerosViewModel = new ListarTablerosViewModel()
+            {
+                Tableros = _tableroRepository.listarTablerosPorID(idUsuario)
+            };
 
-        return View(listarTablerosViewModel);
+            return View(listarTablerosViewModel);
+        }catch(SqliteException ex)
+        {
+            _logger.LogError(ex.ToString());
+            TempData["ErrorMessage"] = "Ocurrió un error en la base de datos. Por favor, intentelo nuevamente";
+            return RedirectToAction("Index", "Error");
+        }
+        catch(Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            TempData["ErrorMessage"] = "Ocurrio un error inesperado. Por favor, intentelo de nuevo";
+            return RedirectToAction("Index", "Error");
+        }
     }   
 
     [HttpPost]
