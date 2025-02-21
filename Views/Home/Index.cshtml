@@ -17,7 +17,15 @@
                 if(tablero.IdUsuarioPropietario == Model.Id)
                 {
                     <a class="btn btn-primary" asp-controller="Tarea" asp-action="IrAsignarTareas" asp-route-idTablero=@tablero.Id>Asignar Tareas</a>
-                    <a class="btn btn-primary" asp-controller="Tablero" asp-action="IrAModificarTablero" asp-route-id=@tablero.Id>Modificar Tablero</a>
+                    <div class="d-flex align-items-center">
+                        <a class="btn btn-primary" asp-controller="Tablero" asp-action="IrAModificarTablero" asp-route-id=@tablero.Id>Modificar Tablero</a>
+                        <form asp-controller="Tablero" asp-action="eliminarTablero" method="post">
+                            <input type="hidden" name="id" value="@tablero.Id" />
+                            <button type="submit" onclick="return confirm('¿Está seguro de eliminar?')" class="btn btn-danger">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </form>
+                    </div>
                 }
             }
         </div>

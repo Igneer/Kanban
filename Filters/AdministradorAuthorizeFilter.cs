@@ -14,13 +14,13 @@ public class AdministradorAuthorizeUserFilter : IActionFilter
         var usuario = context.HttpContext.Session.GetString("Rol");
         if (usuario != "Administrador")
         {
-            _logger.LogInformation("Usuario sin permisos suficients");
+            _logger.LogInformation("Usuario sin permisos suficientes");
             context.Result = new RedirectToActionResult("Index", "Login", null);
         }
     }
     public void OnActionExecuted(ActionExecutedContext context)
     {
-        _logger.LogInformation("Accion ejecutada");
+
     }
 
 }

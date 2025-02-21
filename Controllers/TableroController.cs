@@ -2,13 +2,16 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Kanban.Models;
 using Kanban.ViewModels;
+using Microsoft.Data.Sqlite;
 
 public class TableroController : Controller
 {
+    private readonly ILogger<TableroController> _logger;
     private readonly ITableroRepository _tableroRepository;
-    public TableroController(ITableroRepository tableroRepository)
+    public TableroController(ITableroRepository tableroRepository, ILogger<TableroController> logger)
     {
         _tableroRepository = tableroRepository;
+        _logger = logger;
     }
 
     [HttpGet]
@@ -112,8 +115,27 @@ public class TableroController : Controller
     [ServiceFilter(typeof(AuthorizeUserFilter))]
     public IActionResult eliminarTablero(int id)
     {
-        _tableroRepository.eliminarTablero(id);
+        try
+        {
+            _tableroRepository.eliminarTablero(id);
 
-        return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Home");
+        
+        }catch(SqliteException ex) when(ex.SqliteErrorCode == 19)
+        {
+            _logger.LogError(ex.ToString());
+
+            TempData["ErrorMessage"] = "No se puede eliminar el tablero porque contiene tareas. Asegurese de eliminar las tareas primero.";
+
+            return RedirectToAction("Index", "Error");
+        }
+        catch(Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            
+            TempData["ErrorMessage"] = "Ocurrio un error inesperado. Por favor, intentelo de nuevo";
+
+            return RedirectToAction("Index", "Error");
+        }
     }
 }

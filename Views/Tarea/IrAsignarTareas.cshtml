@@ -23,6 +23,7 @@
                     <form asp-action="asignarTarea" method="post">
                         <input type="hidden" name="idTarea" value="@tarea.Id" />
                         <select name="idUsuario" id="">
+                            <option value="">No Asignar</option>
                             @foreach (var usuario in Model.Usuarios)
                             {
                                 <option value="@usuario.Id">@usuario.NombreUsuario</option>
