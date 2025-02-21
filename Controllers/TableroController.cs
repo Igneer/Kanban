@@ -161,6 +161,8 @@ public class TableroController : Controller
                 Tableros = _tableroRepository.listarTablerosPorID(idUsuario)
             };
 
+            _logger.LogInformation("Listado de tableros obtenido con éxito");
+
             return View(listarTablerosViewModel);
         }catch(SqliteException ex)
         {
