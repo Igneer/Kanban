@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Kanban.ViewModels;
 
 
 public class AccesoATareaFilter : IActionFilter
@@ -17,14 +18,23 @@ public class AccesoATareaFilter : IActionFilter
     {
         try
         {
+            int idTarea; 
             var idUsuario = context.HttpContext.Session.GetInt32("Id").Value;
             var rol = context.HttpContext.Session.GetString("Rol");
-            var idTarea = (int)context.ActionArguments["id"];
+
+            if(context.ActionArguments.ContainsKey("modificarTareaViewModel"))
+            {
+                var model = (ModificarTareaViewModel)context.ActionArguments["modificarTareaViewModel"];
+                idTarea = model.Id;
+            }else
+            {
+                idTarea = (int)context.ActionArguments["idTarea"];
+            }
             
             var tarea = _tareaRepository.obtenerTarea(idTarea);
             var tablero = _tableroRepository.obtenerTablero(tarea.IdTablero);
 
-            if (tablero == null || (rol != "Administrador" && tablero.IdUsuarioPropietario != idUsuario))
+            if (tablero == null || (rol != "Administrador" && tablero.IdUsuarioPropietario != idUsuario && tarea.IdUsuarioAsignado != idUsuario))
             {
                 _logger.LogInformation("Usuario sin permisos suficientes");
                 var controller = (Controller)context.Controller;
@@ -42,7 +52,7 @@ public class AccesoATareaFilter : IActionFilter
     }
     public void OnActionExecuted(ActionExecutedContext context)
     {
-
+        
     }
 
 }

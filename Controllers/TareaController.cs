@@ -73,9 +73,9 @@ public class TareaController : Controller
     [HttpGet]
     [ServiceFilter(typeof(AuthorizeUserFilter))]
     [ServiceFilter(typeof(AccesoATareaFilter))]
-    public IActionResult IrAModificarTarea(int id)
+    public IActionResult IrAModificarTarea(int idTarea)
     {
-        Tarea tarea = _tareaRepository.obtenerTarea(id);
+        Tarea tarea = _tareaRepository.obtenerTarea(idTarea);
 
         ModificarTareaViewModel model = new ModificarTareaViewModel()
         {
@@ -91,7 +91,7 @@ public class TareaController : Controller
     [ServiceFilter(typeof(AuthorizeUserFilter))]
     [ServiceFilter(typeof(AccesoATareaFilter))]
 
-    public IActionResult modificarTarea(ModificarTareaViewModel model)
+    public IActionResult modificarTarea(ModificarTareaViewModel modificarTareaViewModel)
     {
         if(!ModelState.IsValid)
         {
@@ -103,12 +103,12 @@ public class TareaController : Controller
         {
             Tarea tarea = new Tarea()
             {
-                Id = model.Id,
-                Nombre = model.Nombre,
-                Descripcion = model.Descripcion
+                Id = modificarTareaViewModel.Id,
+                Nombre = modificarTareaViewModel.Nombre,
+                Descripcion = modificarTareaViewModel.Descripcion
             };
 
-            _tareaRepository.modificarTarea(model.Id, tarea);
+            _tareaRepository.modificarTarea(modificarTareaViewModel.Id, tarea);
 
             _logger.LogInformation("Tarea modificada con éxito");
 
@@ -132,11 +132,11 @@ public class TareaController : Controller
     [ServiceFilter(typeof(AuthorizeUserFilter))]
     [ServiceFilter(typeof(AccesoATareaFilter))]
 
-    public IActionResult eliminarTarea(int id)
+    public IActionResult eliminarTarea(int idTarea)
     {
         try
         {
-            _tareaRepository.eliminarTarea(id);
+            _tareaRepository.eliminarTarea(idTarea);
 
             return RedirectToAction("Index", "Home");
         }catch(SqliteException ex)
@@ -157,11 +157,11 @@ public class TareaController : Controller
     [ServiceFilter(typeof(AuthorizeUserFilter))]
     [ServiceFilter(typeof(AccesoATareaFilter))]
 
-    public IActionResult cambiarEstadoTarea(int id, int estado, int direccion)
+    public IActionResult cambiarEstadoTarea(int idTarea, int estado, int direccion)
     {
         try
         {
-            _tareaRepository.cambiarEstadoTarea(id, estado, direccion);
+            _tareaRepository.cambiarEstadoTarea(idTarea, estado, direccion);
 
             _logger.LogInformation("Cambio de estado de tarea exitoso");
 
@@ -183,7 +183,7 @@ public class TareaController : Controller
 
     [HttpGet]
     [ServiceFilter(typeof(AuthorizeUserFilter))]
-    [ServiceFilter(typeof(AccesoATareaFilter))]
+    //[ServiceFilter(typeof(AccesoATareaFilter))]
     public IActionResult IrAsignarTareas(int idTablero)
     {
         AsignarTareasViewModel model = new AsignarTareasViewModel()

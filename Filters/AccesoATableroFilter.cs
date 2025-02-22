@@ -1,3 +1,4 @@
+using Kanban.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -15,9 +16,18 @@ public class AccesoATableroFilter : IActionFilter
     {
         try
         {
+            int idTablero; 
             var idUsuario = context.HttpContext.Session.GetInt32("Id");
             var rol = context.HttpContext.Session.GetString("Rol");
-            var idTablero = (int)context.ActionArguments["id"]; 
+            
+            if(context.ActionArguments.ContainsKey("modificarTableroViewModel"))
+            {
+                var model = (ModificarTableroViewModel)context.ActionArguments["modificarTableroViewModel"];
+                idTablero = model.Id;
+            }else
+            {
+                idTablero = (int)context.ActionArguments["id"];
+            }
             
             var tablero = _tableroRepository.obtenerTablero(idTablero);
 

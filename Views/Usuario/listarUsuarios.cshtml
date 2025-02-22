@@ -8,6 +8,10 @@
     <h2>Usuarios</h2>
 </div>
 
+<div class="text-center m-2">
+    <a class="btn btn-success" asp-action="IrACrearUsuario" asp-controller="Usuario">+</a>
+</div>
+
 <table class="table table-bordered table-striped">
     <thead>
         <tr>
@@ -22,7 +26,7 @@
                 <td>@usuario.NombreUsuario</td>
                 <td>@usuario.Rol</td>
                 <td>
-                    <a class="btn btn-primary" asp-action="IrAModificarUsuario" asp-route-id="@usuario.Id">Editar</a>
+                    <a class="btn btn-primary" asp-controller="Usuario" asp-action="IrAModificarUsuario" asp-route-id="@usuario.Id">Editar</a>
                     <form asp-controller="Usuario" asp-action="eliminarUsuario" asp-route-id="@usuario.Id" method="post" style="display:inline;">
                         <button type="submit" class="btn btn-danger" onclick="return confirm('¿Está seguro de eliminar este usuario?')">Eliminar</button>
                     </form>
