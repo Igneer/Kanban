@@ -23,6 +23,11 @@ public class UsuarioRepository  : IUsuarioRepository
             connection.Close();
         }
 
+        if(usuario == null)
+        {
+            throw new Exception("Usuario no creado");
+        }
+
         return usuario;
     }
     public Usuario obtenerUsuario(int id)
@@ -46,6 +51,11 @@ public class UsuarioRepository  : IUsuarioRepository
                 usuario.Rol = (RolUsuario)Convert.ToInt32(reader["rolusuario"]);
             }
             connection.Close();
+        }
+
+        if(usuario == null)
+        {
+            throw new Exception("Usuario no encontrado");
         }
 
         return usuario;
@@ -95,6 +105,11 @@ public class UsuarioRepository  : IUsuarioRepository
                 }
             }
             connection.Close();
+        }
+
+        if(usuarios == null)
+        {
+            throw new Exception("Usuarios no encontrados");
         }
 
         return usuarios;

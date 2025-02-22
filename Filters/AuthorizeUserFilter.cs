@@ -20,7 +20,6 @@ public class AuthorizeUserFilter : IActionFilter
     }
     public void OnActionExecuted(ActionExecutedContext context)
     {
-        _logger.LogInformation("Accion ejecutada");
     }
 
 }
