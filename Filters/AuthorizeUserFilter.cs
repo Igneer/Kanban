@@ -12,10 +12,11 @@ public class AuthorizeUserFilter : IActionFilter
     public void OnActionExecuting(ActionExecutingContext context)
     {
         var usuario = context.HttpContext.Session.GetString("Nombre");
-        if (usuario == null)
+        if (usuario == null )
         {
-            _logger.LogInformation("Usuario no autenticado");
-            context.Result = new RedirectToActionResult("IrAIniciarSesion", "Login", null);
+            _logger.LogInformation("Usuario sin permisos suficientes");
+            context.HttpContext.Items["ErrorMessage"] = "Usuario no logueado";
+            context.Result = new RedirectToActionResult("Index", "Error", null);
         }
     }
     public void OnActionExecuted(ActionExecutedContext context)

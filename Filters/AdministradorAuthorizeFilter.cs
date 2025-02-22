@@ -11,11 +11,12 @@ public class AdministradorAuthorizeUserFilter : IActionFilter
     }
     public void OnActionExecuting(ActionExecutingContext context)
     {
-        var usuario = context.HttpContext.Session.GetString("Rol");
-        if (usuario != "Administrador")
+        var rol = context.HttpContext.Session.GetString("Rol");
+        if (rol != "Administrador")
         {
             _logger.LogInformation("Usuario sin permisos suficientes");
-            context.Result = new RedirectToActionResult("Index", "Login", null);
+            context.HttpContext.Items["ErrorMessage"] = "No tienes permisos suficientes para acceder a esta página.";
+            context.Result = new RedirectToActionResult("Index", "Error", null);
         }
     }
     public void OnActionExecuted(ActionExecutedContext context)

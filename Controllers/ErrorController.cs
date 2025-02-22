@@ -9,6 +9,7 @@ public class ErrorController : Controller
     public IActionResult Index()
     {
         string? errorMessage = TempData["ErrorMessage"]?.ToString();
+        
         ErrorViewModel model = new ErrorViewModel()
         {
             Message = errorMessage  

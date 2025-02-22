@@ -68,8 +68,10 @@ public class TableroController : Controller
 
     [HttpGet]
     [ServiceFilter(typeof(AuthorizeUserFilter))]
+    [ServiceFilter(typeof(AccesoATableroFilter))]
     public IActionResult IrAModificarTablero(int id)
     {
+
         Tablero tablero = new Tablero(); 
         tablero = _tableroRepository.obtenerTablero(id);
 
@@ -85,6 +87,7 @@ public class TableroController : Controller
 
     [HttpPost]
     [ServiceFilter(typeof(AuthorizeUserFilter))]
+    [ServiceFilter(typeof(AccesoATableroFilter))]
     public IActionResult modificarTablero(ModificarTableroViewModel modificarTableroViewModel)
     {
         if(!ModelState.IsValid)
@@ -180,8 +183,9 @@ public class TableroController : Controller
 
     [HttpPost]
     [ServiceFilter(typeof(AuthorizeUserFilter))]
+    [ServiceFilter(typeof(AccesoATableroFilter))]
     public IActionResult eliminarTablero(int id)
-    {
+    {  
         try
         {
             _tableroRepository.eliminarTablero(id);

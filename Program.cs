@@ -24,6 +24,8 @@ builder.Services.AddSession(options =>
 //Registrar filtro de autorizacion
 builder.Services.AddScoped<AuthorizeUserFilter>();
 builder.Services.AddScoped<AdministradorAuthorizeUserFilter>();
+builder.Services.AddScoped<AccesoATableroFilter>();
+builder.Services.AddScoped<AccesoATareaFilter>();
 
 
 var app = builder.Build();

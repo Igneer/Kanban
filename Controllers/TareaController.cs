@@ -72,6 +72,7 @@ public class TareaController : Controller
 
     [HttpGet]
     [ServiceFilter(typeof(AuthorizeUserFilter))]
+    [ServiceFilter(typeof(AccesoATareaFilter))]
     public IActionResult IrAModificarTarea(int id)
     {
         Tarea tarea = _tareaRepository.obtenerTarea(id);
@@ -88,6 +89,8 @@ public class TareaController : Controller
 
     [HttpPost]
     [ServiceFilter(typeof(AuthorizeUserFilter))]
+    [ServiceFilter(typeof(AccesoATareaFilter))]
+
     public IActionResult modificarTarea(ModificarTareaViewModel model)
     {
         if(!ModelState.IsValid)
@@ -127,6 +130,8 @@ public class TareaController : Controller
 
     [HttpPost]
     [ServiceFilter(typeof(AuthorizeUserFilter))]
+    [ServiceFilter(typeof(AccesoATareaFilter))]
+
     public IActionResult eliminarTarea(int id)
     {
         try
@@ -150,6 +155,8 @@ public class TareaController : Controller
 
     [HttpPost]
     [ServiceFilter(typeof(AuthorizeUserFilter))]
+    [ServiceFilter(typeof(AccesoATareaFilter))]
+
     public IActionResult cambiarEstadoTarea(int id, int estado, int direccion)
     {
         try
@@ -176,6 +183,7 @@ public class TareaController : Controller
 
     [HttpGet]
     [ServiceFilter(typeof(AuthorizeUserFilter))]
+    [ServiceFilter(typeof(AccesoATareaFilter))]
     public IActionResult IrAsignarTareas(int idTablero)
     {
         AsignarTareasViewModel model = new AsignarTareasViewModel()
@@ -189,6 +197,7 @@ public class TareaController : Controller
 
     [HttpPost]
     [ServiceFilter(typeof(AuthorizeUserFilter))]
+    [ServiceFilter(typeof(AccesoATareaFilter))]
     public IActionResult asignarTarea(int idUsuario, int idTarea)
     {
         try
