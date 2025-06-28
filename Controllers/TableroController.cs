@@ -2,13 +2,16 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Kanban.Models;
 using Kanban.ViewModels;
+using Microsoft.Data.Sqlite;
 
 public class TableroController : Controller
 {
+    private readonly ILogger<TableroController> _logger;
     private readonly ITableroRepository _tableroRepository;
-    public TableroController(ITableroRepository tableroRepository)
+    public TableroController(ITableroRepository tableroRepository, ILogger<TableroController> logger)
     {
         _tableroRepository = tableroRepository;
+        _logger = logger;
     }
 
     [HttpGet]
@@ -29,27 +32,46 @@ public class TableroController : Controller
     [ServiceFilter(typeof(AuthorizeUserFilter))]
     public IActionResult crearTablero(CrearTableroViewModel crearTableroViewModel)
     {
-        if(!ModelState.IsValid) 
+        if(!ModelState.IsValid)
         {
-            return View("IrACrearTablero");
+            TempData["ErrorMessage"] = "Por favor, revisa los campos ingresados. Algunos datos no son válidos.";
+            return RedirectToAction("Index", "Error"); 
         }
 
-        Tablero tablero = new Tablero()
+        try
         {
-            IdUsuarioPropietario = crearTableroViewModel.IdUsuarioPropietario,
-            Nombre = crearTableroViewModel.Nombre,
-            Descripcion = crearTableroViewModel.Descripcion
-        };
+            Tablero tablero = new Tablero()
+            {
+                IdUsuarioPropietario = crearTableroViewModel.IdUsuarioPropietario,
+                Nombre = crearTableroViewModel.Nombre,
+                Descripcion = crearTableroViewModel.Descripcion
+            };
 
-        _tableroRepository.crearTablero(tablero, crearTableroViewModel.IdUsuarioPropietario);
+            _tableroRepository.crearTablero(tablero, crearTableroViewModel.IdUsuarioPropietario);
 
-        return RedirectToAction("Index", "Home");
+            _logger.LogInformation("Tablero creado con éxito");
+
+            return RedirectToAction("Index", "Home");
+        }catch(SqliteException ex)
+        {
+            _logger.LogError(ex.ToString());
+            TempData["ErrorMessage"] = "Ocurrió un error en la base de datos. Por favor, intentelo nuevamente";
+            return RedirectToAction("Index", "Error");
+        }
+        catch(Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            TempData["ErrorMessage"] = "Ocurrio un error inesperado. Por favor, intentelo de nuevo";
+            return RedirectToAction("Index", "Error");
+        }
     }
 
     [HttpGet]
     [ServiceFilter(typeof(AuthorizeUserFilter))]
+    [ServiceFilter(typeof(AccesoATableroFilter))]
     public IActionResult IrAModificarTablero(int id)
     {
+
         Tablero tablero = new Tablero(); 
         tablero = _tableroRepository.obtenerTablero(id);
 
@@ -65,55 +87,137 @@ public class TableroController : Controller
 
     [HttpPost]
     [ServiceFilter(typeof(AuthorizeUserFilter))]
+    [ServiceFilter(typeof(AccesoATableroFilter))]
     public IActionResult modificarTablero(ModificarTableroViewModel modificarTableroViewModel)
     {
-        if(!ModelState.IsValid) 
+        if(!ModelState.IsValid)
         {
-            return View("IrAModificarTablero");
+            TempData["ErrorMessage"] = "Por favor, revisa los campos ingresados. Algunos datos no son válidos.";
+            return RedirectToAction("Index", "Error"); 
         }
 
-        Tablero tablero = new Tablero()
+        try
         {
-            Id = modificarTableroViewModel.Id,
-            Nombre = modificarTableroViewModel.Nombre,
-            Descripcion = modificarTableroViewModel.Descripcion
-        };
+            Tablero tablero = new Tablero()
+            {
+                Id = modificarTableroViewModel.Id,
+                Nombre = modificarTableroViewModel.Nombre,
+                Descripcion = modificarTableroViewModel.Descripcion
+            };
 
-        _tableroRepository.modificarTablero(modificarTableroViewModel.Id, tablero);
+            _tableroRepository.modificarTablero(modificarTableroViewModel.Id, tablero);
 
-        return RedirectToAction("Index", "Home");
+            _logger.LogInformation("Tablero modificado con éxito");
+
+            return RedirectToAction("Index", "Home");
+        }catch(SqliteException ex)
+        {
+            _logger.LogError(ex.ToString());
+            TempData["ErrorMessage"] = "Ocurrió un error en la base de datos. Por favor, intentelo nuevamente";
+            return RedirectToAction("Index", "Error");
+        }
+        catch(Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            TempData["ErrorMessage"] = "Ocurrio un error inesperado. Por favor, intentelo de nuevo";
+            return RedirectToAction("Index", "Error");
+        }
     }
 
     [HttpGet]
     [ServiceFilter(typeof(AuthorizeUserFilter))]
     public IActionResult listarTableros()
     {
-        ListarTablerosViewModel listarTablerosViewModel = new ListarTablerosViewModel()
+        try
         {
-            Tableros = _tableroRepository.listarTableros()
-        };
-    
-        return View(listarTablerosViewModel);
+            ListarTablerosViewModel listarTablerosViewModel = new ListarTablerosViewModel()
+            {
+                Tableros = _tableroRepository.listarTableros()
+            };
+
+            _logger.LogInformation("Listado de tableros obtenido con éxito");
+        
+            return View(listarTablerosViewModel);
+
+        }catch(SqliteException ex)
+        {
+            _logger.LogError(ex.ToString());
+            TempData["ErrorMessage"] = "Ocurrió un error en la base de datos. Por favor, intentelo nuevamente";
+            return RedirectToAction("Index", "Error");
+        }
+        catch(Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            TempData["ErrorMessage"] = "Ocurrio un error inesperado. Por favor, intentelo de nuevo";
+            return RedirectToAction("Index", "Error");
+        }
     }
 
     [HttpGet]
     [ServiceFilter(typeof(AuthorizeUserFilter))]
-    public IActionResult listarTablerosPorID(int idUsuario)
+    public IActionResult listarTablerosPorID(int idUsuario, [FromServices]ITareaRepository tareaRepository)
     {
-        ListarTablerosViewModel listarTablerosViewModel = new ListarTablerosViewModel()
+        try
         {
-            Tableros = _tableroRepository.listarTablerosPorID(idUsuario)
-        };
+            var tableros = _tableroRepository.listarTablerosPorID(idUsuario);
 
-        return View(listarTablerosViewModel);
+            var tareasPorTablero = new Dictionary<int, List<Tarea>>();
+
+            foreach (var tablero in tableros)
+            {
+                var tareas = tareaRepository.obtenerTareasXTablero(tablero.Id);
+                tareasPorTablero[tablero.Id] = tareas;
+            }
+
+            ListarTablerosViewModel listarTablerosViewModel = new ListarTablerosViewModel()
+            {
+                Tableros = tableros,
+                TareasPorTablero = tareasPorTablero
+            };
+
+            _logger.LogInformation("Listado de tableros obtenido con éxito");
+
+            return View(listarTablerosViewModel);
+        }catch(SqliteException ex)
+        {
+            _logger.LogError(ex.ToString());
+            TempData["ErrorMessage"] = "Ocurrió un error en la base de datos. Por favor, intentelo nuevamente";
+            return RedirectToAction("Index", "Error");
+        }
+        catch(Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            TempData["ErrorMessage"] = "Ocurrio un error inesperado. Por favor, intentelo de nuevo";
+            return RedirectToAction("Index", "Error");
+        }
     }   
 
     [HttpPost]
     [ServiceFilter(typeof(AuthorizeUserFilter))]
+    [ServiceFilter(typeof(AccesoATableroFilter))]
     public IActionResult eliminarTablero(int id)
-    {
-        _tableroRepository.eliminarTablero(id);
+    {  
+        try
+        {
+            _tableroRepository.eliminarTablero(id);
 
-        return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Home");
+        
+        }catch(SqliteException ex) when(ex.SqliteErrorCode == 19)
+        {
+            _logger.LogError(ex.ToString());
+
+            TempData["ErrorMessage"] = "No se puede eliminar el tablero porque contiene tareas. Asegurese de eliminar las tareas primero.";
+
+            return RedirectToAction("Index", "Error");
+        }
+        catch(Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            
+            TempData["ErrorMessage"] = "Ocurrio un error inesperado. Por favor, intentelo de nuevo";
+
+            return RedirectToAction("Index", "Error");
+        }
     }
 }

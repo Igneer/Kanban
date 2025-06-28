@@ -24,7 +24,11 @@ public class TareaRepository : ITareaRepository
 
             connection.Close();
         }
-    
+
+        if(tarea == null)
+        {
+            throw new Exception("Tarea no creada");
+        }
 
         return tarea;
     }
@@ -59,6 +63,11 @@ public class TareaRepository : ITareaRepository
                 }
             }
             connection.Close();
+        }
+
+        if(tarea == null)
+        {
+            throw new Exception("Tarea no encontrada");
         }
 
         return tarea;
@@ -114,6 +123,11 @@ public class TareaRepository : ITareaRepository
             connection.Close();
         }
 
+        if(tareas == null)
+        {
+            throw new Exception("Tareas no encontradas");
+        }
+
         return tareas;
     }
     public List<Tarea> obtenerTareasXTablero(int idTablero)
@@ -152,6 +166,11 @@ public class TareaRepository : ITareaRepository
             connection.Close();
         }
 
+        if(tareas == null)
+        {
+            throw new Exception("Tareas no encontradas");
+        }
+
         return tareas;
     }
     public void eliminarTarea(int idTarea)
@@ -174,6 +193,7 @@ public class TareaRepository : ITareaRepository
     }
     public void asignarTarea(int idUsuario, int idTarea)
     {
+        
         string queryString = @"UPDATE tarea SET id_usuario_asignado = @idUsuario WHERE id = @idTarea";
         
         using(SqliteConnection connection = new SqliteConnection(connectionString))

@@ -2,13 +2,16 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Kanban.Models;
 using Kanban.ViewModels;
+using Microsoft.Data.Sqlite;
 
 public class UsuarioController : Controller
 {
+    private readonly ILogger<UsuarioController> _logger;
     private readonly IUsuarioRepository _usuarioRepository;
-    public UsuarioController(IUsuarioRepository usuarioRepository)
+    public UsuarioController(IUsuarioRepository usuarioRepository, ILogger<UsuarioController> logger)
     {
         _usuarioRepository = usuarioRepository;
+        _logger = logger;
     }
 
     [HttpGet]
@@ -26,18 +29,33 @@ public class UsuarioController : Controller
     {
         if(!ModelState.IsValid)
         {
-            return View("IrACrearUsuario");
+            TempData["ErrorMessage"] = "Por favor, revisa los campos ingresados. Algunos datos no son válidos.";
+            return RedirectToAction("Index", "Error"); 
         }
 
-        Usuario usuario = new Usuario(){
-            NombreUsuario = model.Nombre,
-            Password = model.Password,
-            Rol = model.Rol
-        };
+        try
+        {
+            Usuario usuario = new Usuario(){
+                NombreUsuario = model.Nombre,
+                Password = model.Password,
+                Rol = model.Rol
+            };
 
-        _usuarioRepository.crearUsuario(usuario);
-
-        return RedirectToAction("Index", "Login");
+            _usuarioRepository.crearUsuario(usuario);
+            _logger.LogInformation("Usuario creado con éxito");
+            return RedirectToAction("Index", "Home");
+        }catch(SqliteException ex)
+        {
+            _logger.LogError(ex.ToString());
+            TempData["ErrorMessage"] = "Ocurrió un error en la base de datos. Por favor, intentelo nuevamente";
+            return RedirectToAction("Index", "Error");
+        }
+        catch(Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            TempData["ErrorMessage"] = "Ocurrio un error inesperado. Por favor, intentelo de nuevo";
+            return RedirectToAction("Index", "Error");
+        }
     }
 
     [HttpGet]
@@ -53,7 +71,6 @@ public class UsuarioController : Controller
         {
             Id = usuario.Id,
             NombreUsuario = usuario.NombreUsuario,
-            Password = usuario.Password,
             Rol = usuario.Rol
         };
 
@@ -67,32 +84,63 @@ public class UsuarioController : Controller
     {
         if(!ModelState.IsValid)
         {
-            return View("IrAModificarUsuario");
+            TempData["ErrorMessage"] = "Por favor, revisa los campos ingresados. Algunos datos no son válidos.";
+            return RedirectToAction("Index", "Error"); 
         }
 
-        Usuario usuario = new Usuario()
+        try
         {
-            Id = model.Id,
-            NombreUsuario = model.NombreUsuario,
-            Password = model.Password,
-            Rol = model.Rol
-        };
+            Usuario usuario = new Usuario()
+            {
+                Id = model.Id,
+                NombreUsuario = model.NombreUsuario,
+                Rol = model.Rol
+            };
 
-        _usuarioRepository.modificarUsuario(model.Id, usuario);
+            _usuarioRepository.modificarUsuario(model.Id, usuario);
+            _logger.LogInformation("Usuario modificado con éxito");
+            return RedirectToAction("Index", "Home");
+        }catch(SqliteException ex)
+        {
+            _logger.LogError(ex.ToString());
+            TempData["ErrorMessage"] = "Ocurrió un error en la base de datos. Por favor, intentelo nuevamente";
+            return RedirectToAction("Index", "Error");
+        }
+        catch(Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            TempData["ErrorMessage"] = "Ocurrio un error inesperado. Por favor, intentelo de nuevo";
+            return RedirectToAction("Index", "Error");
+        }
 
-        return RedirectToAction("Index", "Login");
     }
 
     [HttpGet]
     [ServiceFilter(typeof(AuthorizeUserFilter))]
+    [ServiceFilter(typeof(AdministradorAuthorizeUserFilter))]
+
     public IActionResult listarUsuarios()
     {
-        ListarUsuariosViewModel listadoUsuarios  = new ListarUsuariosViewModel()
+        try
         {
-            Usuarios = _usuarioRepository.listarUsuarios()
-        };
-
-        return View(listadoUsuarios);
+            ListarUsuariosViewModel listadoUsuarios  = new ListarUsuariosViewModel()
+            {
+                Usuarios = _usuarioRepository.listarUsuarios()
+            };
+            _logger.LogInformation("Listado de usuarios obtenidos exitosamente");
+            return View(listadoUsuarios);
+        }catch(SqliteException ex)
+        {
+            _logger.LogError(ex.ToString());
+            TempData["ErrorMessage"] = "Ocurrió un error en la base de datos. Por favor, intentelo nuevamente";
+            return RedirectToAction("Index", "Error");
+        }
+        catch(Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            TempData["ErrorMessage"] = "Ocurrio un error inesperado. Por favor, intentelo de nuevo";
+            return RedirectToAction("Index", "Error");
+        }
     }
 
     [HttpPost]
@@ -100,9 +148,30 @@ public class UsuarioController : Controller
     [ServiceFilter(typeof(AuthorizeUserFilter))]
     public IActionResult eliminarUsuario(int id)
     {
-        _usuarioRepository.eliminarUsuario(id);
+        try
+        {
+            _usuarioRepository.eliminarUsuario(id);
+            _logger.LogInformation("Usuario eliminado exitosamente");
+            return RedirectToAction("Index", "Home");
+        }catch(SqliteException ex) when(ex.SqliteErrorCode == 19)
+        {
+            _logger.LogError(ex.ToString());
 
-        return RedirectToAction("Index", "Login");
+            TempData["ErrorMessage"] = "No se puede eliminar el usuario porque posee tableros. Asegurese de eliminar los tableros primero.";
+
+            return RedirectToAction("Index", "Error");
+        }catch(SqliteException ex)
+        {
+            _logger.LogError(ex.ToString());
+            TempData["ErrorMessage"] = "Ocurrió un error en la base de datos. Por favor, intentelo nuevamente";
+            return RedirectToAction("Index", "Error");
+        }
+        catch(Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            TempData["ErrorMessage"] = "Ocurrio un error inesperado. Por favor, intentelo de nuevo";
+            return RedirectToAction("Index", "Error");
+        }
     }
 
 }

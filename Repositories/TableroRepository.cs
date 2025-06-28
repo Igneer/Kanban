@@ -24,6 +24,11 @@ public class TableroRepository : ITableroRepository
             connection.Close();
         }
 
+        if(tablero == null)
+        {
+            throw new Exception("Tablero no creado");
+        }
+
         return tablero;
     }
     public Tablero obtenerTablero(int id)
@@ -48,6 +53,11 @@ public class TableroRepository : ITableroRepository
             }
             connection.Close();
         }
+        
+        if(tablero == null)
+        {
+            throw new Exception("Tablero no encontrado");
+        }
 
         return tablero;
     }
@@ -68,7 +78,6 @@ public class TableroRepository : ITableroRepository
             command.ExecuteNonQuery();
 
             connection.Close();
-
         }
     }
     public List<Tablero> listarTableros()
@@ -96,6 +105,11 @@ public class TableroRepository : ITableroRepository
             }
             connection.Close();
 
+        }
+
+        if(tableros == null)
+        {
+            throw new Exception("Tableros no encontrados");
         }
 
         return tableros;
@@ -129,6 +143,11 @@ public class TableroRepository : ITableroRepository
             }
             connection.Close();
 
+        }
+
+        if(tableros == null)
+        {
+            throw new Exception("Tableros no encontrados");
         }
 
         return tableros;

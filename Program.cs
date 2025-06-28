@@ -9,6 +9,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<ITableroRepository, TableroRepository>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<ITareaRepository, TareaRepository>();
+builder.Services.AddScoped<IFachadaTarea, FachadaTarea>();
+
 
 //Agregar servicios de sesion
 builder.Services.AddDistributedMemoryCache();
@@ -22,6 +24,10 @@ builder.Services.AddSession(options =>
 //Registrar filtro de autorizacion
 builder.Services.AddScoped<AuthorizeUserFilter>();
 builder.Services.AddScoped<AdministradorAuthorizeUserFilter>();
+builder.Services.AddScoped<AccesoATableroFilter>();
+builder.Services.AddScoped<AccesoATareaFilter>();
+builder.Services.AddScoped<CambiarEstadoTareaFilter>();
+
 
 
 var app = builder.Build();

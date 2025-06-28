@@ -1,0 +1,45 @@
+@model Kanban.ViewModels.AsignarTareasViewModel
+
+@{
+    ViewData["Title"] = "Listar Tareas del Tablero";    
+    Usuario? usuarioFiltrado = Model.Usuarios.Where(u => u.Id == Model.Tarea.IdUsuarioAsignado).FirstOrDefault();
+}
+
+<div class="text-center">
+    <h2>Tareas del Tablero</h2>
+</div>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+        </tr>
+    </thead>
+    <tbody>
+            <tr>
+                <td>@Model.Tarea.Nombre</td>
+                <td>
+                    <form asp-action="asignarTarea" method="post">
+                        <input type="hidden" name="idTarea" value="@Model.Tarea.Id" />
+                        <select name="idUsuario" id="">
+                            <option value="null">No Asignar</option>
+                            @foreach (var usuario in Model.Usuarios)
+                            {
+                                <option value="@usuario.Id">@usuario.NombreUsuario</option>
+                            }
+                        </select>
+                        <button type="submit" class="btn btn-success">Asignar</button>
+                    </form>
+                </td>
+                <td>
+                    @if(usuarioFiltrado != null)
+                    {
+                        <p>Tarea asignada anteriormente a: @usuarioFiltrado.NombreUsuario</p>
+                    }else
+                    {
+                        <p>Sin asignar</p>
+                    }
+                </td>
+            </tr>
+    </tbody>
+</table>

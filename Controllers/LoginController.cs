@@ -4,10 +4,12 @@ using Kanban.Models;
 using Kanban.ViewModels;
 public class LoginController : Controller
 {
+    private readonly ILogger<LoginController> _logger;
     private readonly IUsuarioRepository _usuarioRepository;
-    public LoginController(IUsuarioRepository usuarioRepository, ITableroRepository tableroRepository, ITareaRepository tareaRepository)
+    public LoginController(IUsuarioRepository usuarioRepository, ILogger<LoginController> logger)
     {
         _usuarioRepository = usuarioRepository;
+        _logger = logger;
     }
 
     [HttpGet]
@@ -19,20 +21,37 @@ public class LoginController : Controller
     [HttpPost]
     public IActionResult IniciarSesion(LoginViewModel model)
     {
-        var usuarios = _usuarioRepository.listarUsuarios();
-        var usuario = usuarios.FirstOrDefault(u => u.NombreUsuario == model.Nombre && u.Password == model.Password);
-        
-        if (usuario == null)
+        if(!ModelState.IsValid)
         {
-            ModelState.AddModelError(string.Empty, "Nombre de usuario o contraseña incorrectos.");
-            return View("IrAIniciarSesion");  
-        } 
+            TempData["ErrorMessage"] = "Por favor, revisa los campos ingresados. Algunos datos no son válidos.";
+            return RedirectToAction("Index", "Error"); 
+        }
 
-        HttpContext.Session.SetInt32("Id", usuario.Id);
-        HttpContext.Session.SetString("Nombre", usuario.NombreUsuario);
-        HttpContext.Session.SetString("Rol", usuario.Rol.ToString());
+        try
+        {
+            var usuarios = _usuarioRepository.listarUsuarios();
+            var usuario = usuarios.FirstOrDefault(u => u.NombreUsuario == model.Nombre && u.Password == model.Password);
+            
+            if (usuario == null)
+            {
+                ModelState.AddModelError(string.Empty, "Nombre de usuario o contraseña incorrectos.");
+                _logger.LogError("Intento de acceso invalido - Usuario:"+model.Nombre+" Clave ingresada: "+model.Password);
+                return View("IrAIniciarSesion");  
+            } 
 
-        return RedirectToAction("Index", "Home");
+            HttpContext.Session.SetInt32("Id",usuario.Id);
+            HttpContext.Session.SetString("Nombre",usuario.NombreUsuario);
+            HttpContext.Session.SetString("Rol",usuario.Rol.ToString());
+
+            _logger.LogInformation("El usuario "+usuario.NombreUsuario+" ingreso correctamente");
+
+            return RedirectToAction("Index", "Home");
+        }catch(Exception ex)
+        {
+            _logger.LogError(ex.ToString());
+            TempData["ExceptionMessage"] = ex.Message;
+            return RedirectToAction("Index", "Error");
+        }
     }
 
     [HttpGet]
@@ -40,7 +59,7 @@ public class LoginController : Controller
     {
         Response.Cookies.Delete("AuthCookie");
         HttpContext.Session.Clear();
-        return RedirectToAction("Login");
+        return RedirectToAction("IrAIniciarSesion");
     }
 
 }

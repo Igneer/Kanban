@@ -23,6 +23,11 @@ public class UsuarioRepository  : IUsuarioRepository
             connection.Close();
         }
 
+        if(usuario == null)
+        {
+            throw new Exception("Usuario no creado");
+        }
+
         return usuario;
     }
     public Usuario obtenerUsuario(int id)
@@ -48,11 +53,16 @@ public class UsuarioRepository  : IUsuarioRepository
             connection.Close();
         }
 
+        if(usuario == null)
+        {
+            throw new Exception("Usuario no encontrado");
+        }
+
         return usuario;
     }
     public void modificarUsuario(int id, Usuario usuario)
     {
-        string queryString = @"UPDATE usuario SET nombre_usuario = @nombre, password = @password, rolusuario = @rolusuario WHERE id = @id";
+        string queryString = @"UPDATE usuario SET nombre_usuario = @nombre, rolusuario = @rolusuario WHERE id = @id";
             
         using(SqliteConnection connection = new SqliteConnection(connectionString))
         {
@@ -62,7 +72,6 @@ public class UsuarioRepository  : IUsuarioRepository
 
             command.Parameters.AddWithValue("@id", id);
             command.Parameters.AddWithValue("@nombre", usuario.NombreUsuario);
-            command.Parameters.AddWithValue("@password", usuario.Password);
             command.Parameters.AddWithValue("@rolusuario", Convert.ToInt32(usuario.Rol));
 
             command.ExecuteNonQuery();
@@ -96,6 +105,11 @@ public class UsuarioRepository  : IUsuarioRepository
                 }
             }
             connection.Close();
+        }
+
+        if(usuarios == null)
+        {
+            throw new Exception("Usuarios no encontrados");
         }
 
         return usuarios;
